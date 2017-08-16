@@ -3,17 +3,23 @@ package engine
 import (
 	"fmt"
 	"log"
-	"opengl/hello/engine/utils"
+
+	"github.com/DualGo/dualGo/engine/graphics/d2d"
+
+	"github.com/DualGo/dualGo/engine/extends"
+	"github.com/DualGo/dualGo/engine/utils"
 
 	"github.com/go-gl/gl/v4.1-core/gl"
 	"github.com/go-gl/glfw/v3.2/glfw"
 )
 
 type Engine struct {
-	width  int
-	height int
-	title  string
-	window *glfw.Window
+	width   int
+	height  int
+	title   string
+	window  *glfw.Window
+	objects []d2d.Drawable2D
+	modules []extends.Module
 }
 type InitFunc func()
 type UpdateFunc func()
@@ -56,6 +62,9 @@ func (engine *Engine) Init(width, height int, title string, callbackInit InitFun
 	constants.Param.Width = engine.width
 	constants.Param.Height = engine.height
 	callbackInit()
+	for _, element := range engine.modules {
+		element.Init(engine.objects)
+	}
 	engine.loop(callbackUpdate)
 }
 
@@ -63,8 +72,27 @@ func (engine *Engine) Init(width, height int, title string, callbackInit InitFun
 func (engine *Engine) loop(callback UpdateFunc) {
 	for !engine.window.ShouldClose() {
 		gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+		for _, element := range engine.modules {
+			if element.GetUpdatePosition() == "first" {
+				element.Update()
+			}
+
+		}
 		callback()
+		for _, element := range engine.modules {
+			if element.GetUpdatePosition() == "last" {
+				element.Update()
+			}
+		}
 		engine.window.SwapBuffers()
 		glfw.PollEvents()
 	}
+}
+
+func (engine *Engine) AddObject(object d2d.Drawable2D) {
+	engine.objects = append(engine.objects, object)
+}
+
+func (engine *Engine) AddModule(module extends.Module) {
+	engine.modules = append(engine.modules, module)
 }
