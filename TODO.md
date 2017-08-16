@@ -1,17 +1,17 @@
 - [x] 2D Renderer
 - [x] GameLoop
-- [] 3D Renderer
-- [-] use blank texture for 2d and 3d primitives 
-- [-] le shader est pour chaque prmimitives 
-- [] rotation 
-- [] not draw if not in the camera 
+- [ ] 3D Renderer
+- [ ] use blank texture for 2d and 3d primitives 
+- [ ] le shader est pour chaque prmimitives 
+- [ ] rotation 
+- [ ] not draw if not in the camera 
 - [x] move method
-- [] keyboard input 
+- [ ] keyboard input 
 - [x] replace scale matrix by size 
-- [] system de module
-- [] essayer de mettre la creation du model dans le renderer
-- [] faire un heritage et ajouter des primitives 
-- [] commenter le code
-- [] ajouter des primitives 
-- [] go get
-- [] créer 
+- [ ] system de module
+- [ ] essayer de mettre la creation du model dans le renderer
+- [ ] faire un heritage et ajouter des primitives 
+- [ ] commenter le code
+- [ ] ajouter des primitives 
+- [ ] go get
+- [ ] créer 
