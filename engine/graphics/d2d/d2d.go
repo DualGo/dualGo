@@ -5,6 +5,7 @@ import (
 
 	"github.com/DualGo/dualGo/engine/shader"
 	"github.com/DualGo/dualGo/engine/texture"
+	"github.com/DualGo/dualGo/engine/utils"
 
 	"github.com/go-gl/gl/v4.1-core/gl"
 	"github.com/go-gl/mathgl/mgl32"
@@ -35,7 +36,7 @@ func (sprite *Sprite) Init(position, size mgl32.Vec2, texturePath string, shader
 	sprite.scale = 1
 	sprite.angle = 0
 	//load texture
-	sprite.texture, sprite.err = texture.NewTexture(texturePath)
+	sprite.texture, sprite.err = texture.NewTexture(constants.Param.TexturePath, texturePath)
 	if sprite.err != nil {
 		log.Fatalln(sprite.err)
 	}

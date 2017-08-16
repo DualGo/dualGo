@@ -1,7 +1,8 @@
 package constants
 
 type game struct {
-	Width, Height int 
+	Width, Height int
+	TexturePath   string
 }
 
-var Param game = game{0,0}
+var Param game = game{0, 0, ""}

@@ -12,8 +12,8 @@ import (
 	"github.com/go-gl/gl/v4.1-core/gl"
 )
 
-func NewTexture(file string) (uint32, error) {
-	dir, err := importPathToDir("opengl/hello")
+func NewTexture(from, file string) (uint32, error) {
+	dir, err := importPathToDir(from)
 	if err != nil {
 		log.Fatalln("Unable to find Go package in your GOPATH, it's needed to load assets:", err)
 	}
