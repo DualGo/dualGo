@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/go-gl/gl/v4.1-core/gl"
+	"github.com/DualGo/gl/v4.1-core/gl"
 )
 
 const (
@@ -93,6 +93,6 @@ func compileShader(source string, shaderType uint32) (uint32, error) {
 	return shader, nil
 }
 
-func (this *Shader) GetProgram() uint32{
+func (this *Shader) GetProgram() uint32 {
 	return this.prog
 }

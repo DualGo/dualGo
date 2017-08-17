@@ -7,7 +7,7 @@ import (
 	"github.com/DualGo/dualGo/engine/graphics/d2d"
 	"github.com/DualGo/dualGo/engine/shader"
 
-	"github.com/go-gl/gl/v4.1-core/gl"
+	"github.com/DualGo/gl/v4.1-core/gl"
 )
 
 type Renderer interface {

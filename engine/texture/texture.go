@@ -9,7 +9,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/go-gl/gl/v4.1-core/gl"
+	"github.com/DualGo/gl/v4.1-core/gl"
 )
 
 func NewTexture(from, file string) (uint32, error) {

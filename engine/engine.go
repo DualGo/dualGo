@@ -9,8 +9,8 @@ import (
 	"github.com/DualGo/dualGo/engine/extends"
 	"github.com/DualGo/dualGo/engine/utils"
 
-	"github.com/go-gl/gl/v4.1-core/gl"
-	"github.com/go-gl/glfw/v3.2/glfw"
+	"github.com/DualGo/gl/v4.1-core/gl"
+	"github.com/DualGo/glfw/v3.2/glfw"
 )
 
 type Engine struct {
