@@ -16,4 +16,9 @@
 - [ ] go get
 - [ ] créer un module Debug 
 - [ ] ajouter du texte 
-- [ ] sond 
+- [ ] son
+- [ ] handle du resize 
+- [ ] handle error 
+- [ ] possibilite acceder a des elements plus bas level
+- [ ] id pour les objects 
+- [ ] regarder viewport et camera 

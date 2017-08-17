@@ -5,47 +5,61 @@ import (
 	"log"
 
 	"github.com/DualGo/dualGo/engine/graphics/d2d"
+	"github.com/DualGo/dualGo/engine/renderer"
+	"github.com/DualGo/dualGo/engine/utils"
 
 	"github.com/DualGo/dualGo/engine/extends"
-	"github.com/DualGo/dualGo/engine/utils"
 
 	"github.com/DualGo/gl/v4.1-core/gl"
 	"github.com/DualGo/glfw/v3.2/glfw"
 )
 
 type Engine struct {
-	width   int
-	height  int
-	title   string
-	window  *glfw.Window
-	objects []d2d.Drawable2D
-	modules []extends.Module
+	width    int
+	height   int
+	title    string
+	window   *glfw.Window
+	objects  []d2d.Drawable2D
+	modules  []extends.Module
+	renderer *renderer.Renderer2D
 }
 type InitFunc func()
 type UpdateFunc func()
 
 /*Init all components require by opengl and the engine*/
-func (engine *Engine) Init(width, height int, title string, callbackInit InitFunc, callbackUpdate UpdateFunc) {
-	engine.width = width
-	engine.height = height
+func (engine *Engine) Init(width, height int, renderer *renderer.Renderer2D, title string, callbackInit InitFunc, callbackUpdate UpdateFunc) {
+
+	engine.renderer = renderer
+	engine.width, engine.height = width, height
+
 	engine.title = title
+
+	//setup constants
+	constants.Param.Width = engine.width
+	constants.Param.Height = engine.height
+	constants.Param.Title = engine.title
 
 	if err := glfw.Init(); err != nil {
 		log.Fatalln("failed to initialize glfw:", err)
 	}
 	defer glfw.Terminate()
 
-	glfw.WindowHint(glfw.Resizable, glfw.False)
+	glfw.WindowHint(glfw.Resizable, glfw.True)
 	glfw.WindowHint(glfw.ContextVersionMajor, 4)
 	glfw.WindowHint(glfw.ContextVersionMinor, 1)
 	glfw.WindowHint(glfw.OpenGLProfile, glfw.OpenGLCoreProfile)
 	glfw.WindowHint(glfw.OpenGLForwardCompatible, glfw.True)
-	window, err := glfw.CreateWindow(width, height, title, nil, nil)
+	window, err := glfw.CreateWindow(engine.width, engine.height, title, nil, nil)
 	if err != nil {
 		panic(err)
 	}
 	engine.window = window
 	engine.window.MakeContextCurrent()
+	onResize := func(w *glfw.Window, width int, height int) {
+		engine.renderer.SetWidth(width)
+		engine.renderer.SetHeight(height)
+	}
+	engine.window.SetSizeCallback(onResize)
 
 	// Initialize Glow
 	if err := gl.Init(); err != nil {
@@ -58,10 +72,9 @@ func (engine *Engine) Init(width, height int, title string, callbackInit InitFun
 	gl.BlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
 	gl.ClearColor(0.0, 0.0, 0.0, 1.0)
 
-	//setup constants
-	constants.Param.Width = engine.width
-	constants.Param.Height = engine.height
 	callbackInit()
+	renderer.SetWidth(width)
+	renderer.SetHeight(height)
 	for _, element := range engine.modules {
 		element.Init(engine.objects)
 	}
@@ -72,6 +85,7 @@ func (engine *Engine) Init(width, height int, title string, callbackInit InitFun
 func (engine *Engine) loop(callback UpdateFunc) {
 	for !engine.window.ShouldClose() {
 		gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+		engine.renderer.GetCamera().Update(engine.renderer.GetShader())
 		for _, element := range engine.modules {
 			if element.GetUpdatePosition() == "first" {
 				element.Update()

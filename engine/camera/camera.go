@@ -15,6 +15,7 @@ type Camera2D struct {
 }
 
 func (camera *Camera2D) Init(shader *shader.Shader, width, height int) {
+
 	//matrice de projection
 	camera.projection = mgl32.Ortho(0, float32(width), float32(height), 0, -1, 1)
 	camera.projectionUniform = gl.GetUniformLocation(shader.GetProgram(), gl.Str("projection\x00"))
@@ -26,7 +27,9 @@ func (camera *Camera2D) Init(shader *shader.Shader, width, height int) {
 }
 
 func (camera *Camera2D) Update(shader *shader.Shader) {
-	camera.projection = mgl32.Ortho(camera.position.X(), float32(camera.size.X())+camera.position.X(), float32(camera.size.Y()+camera.position.Y()), camera.position.Y(), -1, 1)
+
+	gl.Viewport(0, 0, int32(camera.size.X()), int32(camera.size.Y()))
+	camera.projection = mgl32.Ortho(camera.position.X(), float32(camera.size.X())+camera.position.X(), float32(camera.size.Y()+camera.position.Y()), 0, -1, 1)
 	camera.projectionUniform = gl.GetUniformLocation(shader.GetProgram(), gl.Str("projection\x00"))
 	gl.UniformMatrix4fv(camera.projectionUniform, 1, false, &camera.projection[0])
 }
@@ -37,6 +40,14 @@ func (camera *Camera2D) SetPosition(position mgl32.Vec2) {
 
 func (camera Camera2D) GetPosition() mgl32.Vec2 {
 	return camera.position
+}
+
+func (camera *Camera2D) SetSize(size mgl32.Vec2) {
+	camera.size = size
+}
+
+func (camera Camera2D) GetSize() mgl32.Vec2 {
+	return camera.size
 }
 
 func (camera *Camera2D) Move(vector mgl32.Vec2) {

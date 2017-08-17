@@ -6,14 +6,10 @@ import (
 	"github.com/DualGo/dualGo/engine/camera"
 	"github.com/DualGo/dualGo/engine/graphics/d2d"
 	"github.com/DualGo/dualGo/engine/shader"
+	"github.com/DualGo/mathgl/mgl32"
 
 	"github.com/DualGo/gl/v4.1-core/gl"
 )
-
-type Renderer interface {
-	Init(width, height int)
-	GetShader() shader.Shader
-}
 
 //2D Renderer
 type Renderer2D struct {
@@ -50,8 +46,9 @@ const (
 	` + "\x00"
 )
 
-func (renderer *Renderer2D) Init(width, height int, vertexShader, fragmentShader string) {
-	renderer.width, renderer.height = width, height
+func (renderer *Renderer2D) Init(vertexShader, fragmentShader string) {
+	renderer.width, renderer.height = 0, 0
+
 	if vertexShader != "" {
 		if fragmentShader != "" {
 			renderer.shader.Init(vertexShader, fragmentShader)
@@ -104,7 +101,6 @@ func (renderer *Renderer2D) initVao() {
 
 func (renderer *Renderer2D) Draw(drawable d2d.Drawable2D) {
 	renderer.shader.Use()
-	renderer.camera.Update(&renderer.shader)
 	drawable.Push(&renderer.shader)
 	defer drawable.Pop()
 	//position
@@ -119,10 +115,28 @@ func (renderer *Renderer2D) Draw(drawable d2d.Drawable2D) {
 
 }
 
-func (renderer Renderer2D) GetCamera() camera.Camera2D {
-	return renderer.camera
+func (renderer *Renderer2D) SetWidth(width int) {
+	renderer.width = width
+	renderer.camera.SetSize(mgl32.Vec2{float32(width), renderer.camera.GetSize().Y()})
 }
 
-func (renderer Renderer2D) GetShader() *shader.Shader {
+func (renderer *Renderer2D) SetHeight(height int) {
+	renderer.height = height
+	renderer.camera.SetSize(mgl32.Vec2{renderer.camera.GetSize().X(), float32(height)})
+}
+
+func (renderer Renderer2D) GetWidth() int {
+	return renderer.width
+}
+
+func (renderer Renderer2D) GetHeight() int {
+	return renderer.height
+}
+
+func (renderer *Renderer2D) GetCamera() *camera.Camera2D {
+	return &renderer.camera
+}
+
+func (renderer *Renderer2D) GetShader() *shader.Shader {
 	return &renderer.shader
 }
