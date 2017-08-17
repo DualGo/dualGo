@@ -50,9 +50,18 @@ const (
 	` + "\x00"
 )
 
-func (renderer *Renderer2D) Init(width, height int) {
+func (renderer *Renderer2D) Init(width, height int, vertexShader, fragmentShader string) {
 	renderer.width, renderer.height = width, height
-	renderer.shader.Init(vertexShaderSource, fragmentShaderSource)
+	if vertexShader != "" {
+		if fragmentShader != "" {
+			renderer.shader.Init(vertexShader, fragmentShader)
+		} else {
+			renderer.shader.Init(vertexShader, fragmentShaderSource)
+		}
+	} else {
+		renderer.shader.Init(vertexShaderSource, fragmentShaderSource)
+	}
+
 	renderer.shader.Use()
 	renderer.initVao()
 	renderer.camera.Init(&renderer.shader, renderer.width, renderer.height)

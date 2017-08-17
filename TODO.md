@@ -14,4 +14,6 @@
 - [ ] commenter le code
 - [ ] ajouter des primitives 
 - [ ] go get
-- [ ] créer 
+- [ ] créer un module Debug 
+- [ ] ajouter du texte 
+- [ ] sond 
