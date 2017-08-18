@@ -30,6 +30,7 @@ type Sprite struct {
 }
 
 func (sprite *Sprite) Init(position, size mgl32.Vec2, texturePath string, shader *shader.Shader) {
+	shader.Use()
 	sprite.position = position
 	sprite.size = size
 	sprite.origin = mgl32.Vec2{0, 0}
@@ -40,6 +41,7 @@ func (sprite *Sprite) Init(position, size mgl32.Vec2, texturePath string, shader
 	if sprite.err != nil {
 		log.Fatalln(sprite.err)
 	}
+	gl.UseProgram(0)
 
 }
 
@@ -56,8 +58,6 @@ func (sprite Sprite) Push(shader *shader.Shader) {
 	modelUniform := gl.GetUniformLocation(shader.GetProgram(), gl.Str("model\x00"))
 
 	gl.UniformMatrix4fv(modelUniform, 1, false, &model[0])
-	gl.ActiveTexture(gl.TEXTURE0)
-	gl.BindTexture(gl.TEXTURE_2D, sprite.texture)
 
 }
 

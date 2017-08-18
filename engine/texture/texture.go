@@ -9,8 +9,15 @@ import (
 	"log"
 	"os"
 
+	"github.com/DualGo/glfont"
+
 	"github.com/DualGo/gl/v4.1-core/gl"
 )
+
+type Font struct {
+	Name  string
+	Value *glfont.Font
+}
 
 func NewTexture(from, file string) (uint32, error) {
 	dir, err := importPathToDir(from)

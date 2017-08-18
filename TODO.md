@@ -1,24 +1,26 @@
 - [x] 2D Renderer
 - [x] GameLoop
 - [ ] 3D Renderer
-- [ ] use blank texture for 2d and 3d primitives 
-- [ ] le shader est pour chaque prmimitives 
 - [ ] rotation 
 - [ ] not draw if not in the camera 
 - [x] move method
 - [ ] keyboard input 
 - [x] replace scale matrix by size 
-- [ ] system de module
+- [x] system de module
 - [ ] essayer de mettre la creation du model dans le renderer
 - [ ] faire un heritage et ajouter des primitives 
 - [ ] commenter le code
 - [ ] ajouter des primitives 
-- [ ] go get
+- [x] go get
 - [ ] créer un module Debug 
-- [ ] ajouter du texte 
+- [x] ajouter du texte 
 - [ ] son
-- [ ] handle du resize 
+- [x] handle du resize 
 - [ ] handle error 
 - [ ] possibilite acceder a des elements plus bas level
 - [ ] id pour les objects 
 - [ ] regarder viewport et camera 
+- [ ] ajouter un callback pour disposer
+- [ ] swapInterval
+- [ ] texte qui ne reste pas dans la camera 
+- [ ] integrer en interne glfont ? 

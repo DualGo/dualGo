@@ -3,9 +3,12 @@ package renderer
 import (
 	"unsafe"
 
+	"github.com/DualGo/glfont"
+
 	"github.com/DualGo/dualGo/engine/camera"
 	"github.com/DualGo/dualGo/engine/graphics/d2d"
 	"github.com/DualGo/dualGo/engine/shader"
+	"github.com/DualGo/dualGo/engine/texture"
 	"github.com/DualGo/mathgl/mgl32"
 
 	"github.com/DualGo/gl/v4.1-core/gl"
@@ -19,6 +22,8 @@ type Renderer2D struct {
 	vao            uint32
 	vertAttrib     uint32
 	texCoordAttrib uint32
+	fonts          []texture.Font
+	fontIndex      int
 }
 
 const (
@@ -47,8 +52,8 @@ const (
 )
 
 func (renderer *Renderer2D) Init(vertexShader, fragmentShader string) {
-	renderer.width, renderer.height = 0, 0
-
+	renderer.width, renderer.height = 800, 600
+	renderer.fontIndex = 0
 	if vertexShader != "" {
 		if fragmentShader != "" {
 			renderer.shader.Init(vertexShader, fragmentShader)
@@ -62,7 +67,7 @@ func (renderer *Renderer2D) Init(vertexShader, fragmentShader string) {
 	renderer.shader.Use()
 	renderer.initVao()
 	renderer.camera.Init(&renderer.shader, renderer.width, renderer.height)
-
+	gl.UseProgram(0)
 }
 
 func (renderer *Renderer2D) initVao() {
@@ -101,6 +106,8 @@ func (renderer *Renderer2D) initVao() {
 
 func (renderer *Renderer2D) Draw(drawable d2d.Drawable2D) {
 	renderer.shader.Use()
+	gl.Enable(gl.BLEND)
+	gl.BlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
 	drawable.Push(&renderer.shader)
 	defer drawable.Pop()
 	//position
@@ -112,7 +119,24 @@ func (renderer *Renderer2D) Draw(drawable d2d.Drawable2D) {
 
 	gl.DrawArrays(gl.TRIANGLES, 0, 6)
 	gl.BindVertexArray(0)
+	gl.UseProgram(0)
+	gl.Disable(gl.BLEND)
 
+}
+
+func (renderer *Renderer2D) DrawText(x, y, scale float32, text string) {
+	renderer.fonts[renderer.fontIndex].Value.Printf(x, y, scale, text)
+}
+
+//font rendering
+func (renderer *Renderer2D) LoadFont(path string, scale int32, fontName string) error {
+	font, err := glfont.LoadFont(path, scale, renderer.width, renderer.height)
+	if err != nil {
+		return err
+	}
+	font.SetColor(1.0, 1.0, 1.0, 1.0)
+	renderer.fonts = append(renderer.fonts, texture.Font{Name: fontName, Value: font})
+	return nil
 }
 
 func (renderer *Renderer2D) SetWidth(width int) {
@@ -139,4 +163,21 @@ func (renderer *Renderer2D) GetCamera() *camera.Camera2D {
 
 func (renderer *Renderer2D) GetShader() *shader.Shader {
 	return &renderer.shader
+}
+
+func (renderer *Renderer2D) SetFont(fontName string) {
+	for index, element := range renderer.fonts {
+		if element.Name == fontName {
+			renderer.fontIndex = index
+		}
+	}
+}
+
+func (renderer *Renderer2D) GetFont(fontName string) *glfont.Font {
+	for _, element := range renderer.fonts {
+		if element.Name == fontName {
+			return element.Value
+		}
+	}
+	return nil
 }

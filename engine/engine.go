@@ -55,6 +55,7 @@ func (engine *Engine) Init(width, height int, renderer *renderer.Renderer2D, tit
 	}
 	engine.window = window
 	engine.window.MakeContextCurrent()
+	glfw.SwapInterval(1)
 	onResize := func(w *glfw.Window, width int, height int) {
 		engine.renderer.SetWidth(width)
 		engine.renderer.SetHeight(height)
@@ -68,9 +69,7 @@ func (engine *Engine) Init(width, height int, renderer *renderer.Renderer2D, tit
 
 	version := gl.GoStr(gl.GetString(gl.VERSION))
 	fmt.Println("OpenGL version", version)
-	gl.Enable(gl.BLEND)
-	gl.BlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
-	gl.ClearColor(0.0, 0.0, 0.0, 1.0)
+	gl.ClearColor(0, 0, 0, 0.0)
 
 	callbackInit()
 	renderer.SetWidth(width)
