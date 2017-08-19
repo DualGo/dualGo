@@ -1,16 +1,15 @@
 - [x] 2D Renderer
 - [x] GameLoop
 - [ ] 3D Renderer
-- [ ] rotation 
+- [x] rotation 
 - [ ] not draw if not in the camera 
 - [x] move method
-- [ ] keyboard input 
+- [x] keyboard input 
 - [x] replace scale matrix by size 
 - [x] system de module
 - [ ] essayer de mettre la creation du model dans le renderer
 - [ ] faire un heritage et ajouter des primitives 
 - [ ] commenter le code
-- [ ] ajouter des primitives 
 - [x] go get
 - [ ] créer un module Debug 
 - [x] ajouter du texte 
@@ -22,5 +21,8 @@
 - [ ] regarder viewport et camera 
 - [ ] ajouter un callback pour disposer
 - [ ] swapInterval
-- [ ] texte qui ne reste pas dans la camera 
-- [ ] integrer en interne glfont ? 
+- [ ] texte qui ne reste pas dans la camera ( au choix )
+- [ ] integrer en interne glfont ? ( recupérer les shaders et ajouter la matrices de la caméra )0 
+- [ ] bien organiser les constantes 
+- [ ] joystick input 
+- [ ] mouse input 

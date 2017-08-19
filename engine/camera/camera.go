@@ -27,12 +27,11 @@ func (camera *Camera2D) Init(shader *shader.Shader, width, height int) {
 }
 
 func (camera *Camera2D) Update(shader *shader.Shader) {
-	shader.Use()
 	gl.Viewport(0, 0, int32(camera.size.X()), int32(camera.size.Y()))
 	camera.projection = mgl32.Ortho(camera.position.X(), float32(camera.size.X())+camera.position.X(), float32(camera.size.Y()+camera.position.Y()), 0, -1, 1)
 	camera.projectionUniform = gl.GetUniformLocation(shader.GetProgram(), gl.Str("projection\x00"))
 	gl.UniformMatrix4fv(camera.projectionUniform, 1, false, &camera.projection[0])
-	gl.UseProgram(0)
+
 }
 
 func (camera *Camera2D) SetPosition(position mgl32.Vec2) {

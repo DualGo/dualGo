@@ -12,8 +12,9 @@ import (
 )
 
 type Drawable2D interface {
-	Push(shader *shader.Shader)
+	Push()
 	Pop()
+	GetShader() *shader.Shader
 }
 
 type Sprite struct {
@@ -25,12 +26,14 @@ type Sprite struct {
 	scaleMat       mgl32.Mat4
 	rotationMat    mgl32.Mat4
 	translationMat mgl32.Mat4
+	shader         *shader.Shader
 	texture        uint32
 	err            error
 }
 
 func (sprite *Sprite) Init(position, size mgl32.Vec2, texturePath string, shader *shader.Shader) {
-	shader.Use()
+	sprite.shader = shader
+	sprite.shader.Use()
 	sprite.position = position
 	sprite.size = size
 	sprite.origin = mgl32.Vec2{0, 0}
@@ -45,7 +48,7 @@ func (sprite *Sprite) Init(position, size mgl32.Vec2, texturePath string, shader
 
 }
 
-func (sprite Sprite) Push(shader *shader.Shader) {
+func (sprite Sprite) Push() {
 	gl.ActiveTexture(gl.TEXTURE0)
 	gl.BindTexture(gl.TEXTURE_2D, sprite.texture)
 
@@ -55,7 +58,7 @@ func (sprite Sprite) Push(shader *shader.Shader) {
 	model = model.Mul4(mgl32.Translate3D(-sprite.origin.X(), -sprite.origin.Y(), 0))
 	model = model.Mul4(mgl32.Scale3D(sprite.size.X(), sprite.size.Y(), 1))
 
-	modelUniform := gl.GetUniformLocation(shader.GetProgram(), gl.Str("model\x00"))
+	modelUniform := gl.GetUniformLocation(sprite.shader.GetProgram(), gl.Str("model\x00"))
 
 	gl.UniformMatrix4fv(modelUniform, 1, false, &model[0])
 
@@ -107,4 +110,8 @@ func (sprite *Sprite) SetOrigin(origin mgl32.Vec2) {
 
 func (sprite Sprite) GetOrigin() mgl32.Vec2 {
 	return sprite.origin
+}
+
+func (sprite Sprite) GetShader() *shader.Shader {
+	return sprite.shader
 }

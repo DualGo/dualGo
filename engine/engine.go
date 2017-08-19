@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/DualGo/dualGo/engine/graphics/d2d"
+	"github.com/DualGo/dualGo/engine/input"
 	"github.com/DualGo/dualGo/engine/renderer"
 	"github.com/DualGo/dualGo/engine/utils"
 
@@ -60,7 +61,11 @@ func (engine *Engine) Init(width, height int, renderer *renderer.Renderer2D, tit
 		engine.renderer.SetWidth(width)
 		engine.renderer.SetHeight(height)
 	}
+	onKeyPressed := func(w *glfw.Window, key glfw.Key, scancode int, action glfw.Action, mods glfw.ModifierKey) {
+		input.SetKey(key, action)
+	}
 	engine.window.SetSizeCallback(onResize)
+	engine.window.SetKeyCallback(onKeyPressed)
 
 	// Initialize Glow
 	if err := gl.Init(); err != nil {
@@ -84,7 +89,6 @@ func (engine *Engine) Init(width, height int, renderer *renderer.Renderer2D, tit
 func (engine *Engine) loop(callback UpdateFunc) {
 	for !engine.window.ShouldClose() {
 		gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-		engine.renderer.GetCamera().Update(engine.renderer.GetShader())
 		for _, element := range engine.modules {
 			if element.GetUpdatePosition() == "first" {
 				element.Update()
@@ -97,6 +101,7 @@ func (engine *Engine) loop(callback UpdateFunc) {
 				element.Update()
 			}
 		}
+		input.RemoveKeys()
 		engine.window.SwapBuffers()
 		glfw.PollEvents()
 	}

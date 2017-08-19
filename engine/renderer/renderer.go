@@ -105,10 +105,11 @@ func (renderer *Renderer2D) initVao() {
 }
 
 func (renderer *Renderer2D) Draw(drawable d2d.Drawable2D) {
-	renderer.shader.Use()
+	drawable.GetShader().Use()
+	renderer.camera.Update(drawable.GetShader())
 	gl.Enable(gl.BLEND)
 	gl.BlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
-	drawable.Push(&renderer.shader)
+	drawable.Push()
 	defer drawable.Pop()
 	//position
 	gl.BindVertexArray(renderer.vao)
@@ -125,6 +126,7 @@ func (renderer *Renderer2D) Draw(drawable d2d.Drawable2D) {
 }
 
 func (renderer *Renderer2D) DrawText(x, y, scale float32, text string) {
+	renderer.camera.Update(&renderer.shader)
 	renderer.fonts[renderer.fontIndex].Value.Printf(x, y, scale, text)
 }
 
