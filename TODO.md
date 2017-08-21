@@ -13,7 +13,7 @@
 - [x] go get
 - [ ] créer un module Debug 
 - [x] ajouter du texte 
-- [ ] son
+- [x] son
 - [x] handle du resize 
 - [ ] handle error 
 - [ ] possibilite acceder a des elements plus bas level
