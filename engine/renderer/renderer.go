@@ -125,8 +125,9 @@ func (renderer *Renderer2D) Draw(drawable d2d.Drawable2D) {
 
 }
 
-func (renderer *Renderer2D) DrawText(x, y, scale float32, text string) {
+func (renderer *Renderer2D) DrawText(x, y, scale float32, text string, color mgl32.Vec4) {
 	renderer.camera.Update(&renderer.shader)
+	renderer.fonts[renderer.fontIndex].Value.SetColor(color.X(), color.Y(), color.Z(), color.W())
 	renderer.fonts[renderer.fontIndex].Value.Printf(x, y, scale, text)
 }
 

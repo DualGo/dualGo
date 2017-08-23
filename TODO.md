@@ -11,7 +11,7 @@
 - [ ] faire un heritage et ajouter des primitives 
 - [ ] commenter le code
 - [x] go get
-- [ ] créer un module Debug 
+- [x] créer un module Debug 
 - [x] ajouter du texte 
 - [x] son
 - [x] handle du resize 
