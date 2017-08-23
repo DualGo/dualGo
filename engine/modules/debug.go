@@ -1,5 +1,6 @@
 package modules
 
+// # Package modules
 import (
 	"github.com/DualGo/dualGo/engine/extends"
 	"github.com/DualGo/dualGo/engine/graphics/d2d"

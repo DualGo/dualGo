@@ -1,5 +1,6 @@
 package renderer
 
+// # Package renderer
 import (
 	"unsafe"
 

@@ -1,5 +1,6 @@
 package shader
 
+// # Package shader
 import (
 	"fmt"
 	"strings"

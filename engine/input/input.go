@@ -1,5 +1,6 @@
 package input
 
+// # Package input
 import "github.com/DualGo/glfw/v3.2/glfw"
 
 type Key struct {

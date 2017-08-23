@@ -1,5 +1,6 @@
 package constants
 
+// # Package constants
 type game struct {
 	Width, Height int
 	Title         string

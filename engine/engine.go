@@ -1,5 +1,6 @@
 package engine
 
+//# Package Engine
 import (
 	"fmt"
 	"log"
@@ -56,7 +57,7 @@ func (engine *Engine) Init(width, height int, renderer *renderer.Renderer2D, tit
 	}
 	engine.window = window
 	engine.window.MakeContextCurrent()
-	glfw.SwapInterval(1)
+	//glfw.SwapInterval(1)
 	onResize := func(w *glfw.Window, width int, height int) {
 		engine.renderer.SetWidth(width)
 		engine.renderer.SetHeight(height)

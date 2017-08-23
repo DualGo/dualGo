@@ -1,5 +1,6 @@
 package texture
 
+// # Package texture
 import (
 	"fmt"
 	"go/build"
