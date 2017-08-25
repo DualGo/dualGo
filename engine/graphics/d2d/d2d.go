@@ -13,11 +13,11 @@ import (
 )
 
 //- ## Interface Drawable2D
-//- > Push()
+//	- > Push()
 // 
-//- > Pop()
+//	- > Pop()
 // 
-//- > GetShader() *shader.Shader
+//	- > GetShader() *shader.Shader
 // 
 type Drawable2D interface {
 	Push()
@@ -40,9 +40,9 @@ type Sprite struct {
 }
 
 //- ### Init(position, size mgl32.Vec2, texturePath string, shader *shader.Shader)
-//- > init the sprite
+//	- > init the sprite
 // 
-//- > return void
+//  - > return void
 // 
 func (sprite *Sprite) Init(position, size mgl32.Vec2, texturePath string, shader *shader.Shader) {
 	sprite.shader = shader
