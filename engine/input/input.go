@@ -15,7 +15,9 @@ const (
 
 //- ## Var 
 //	- #### keys type `[]Key` *store keys of the input system* 
+//	- #### joysticks type `[]int` 
 var keys []Key
+var joysticks []Joystick 
 
 
 //- ## Struct Key 
@@ -54,4 +56,62 @@ func SetKey(keycode glfw.Key, action glfw.Action) {
 // 
 func RemoveKeys() {
 	keys = nil
+}
+
+//- ## Struct Joystick
+type Joystick struct{
+	value	int
+
+}
+
+func GetAxe(joy, axe int) float32{
+	return glfw.GetJoystickAxes(glfw.Joystick(joy))[axe]
+}
+
+//	- ### ConnectJoystick(joy `int`)
+//		- > add joystick to joysticks list 
+// 		
+//		- > return `void`
+//
+func ConnectJoystick(joy int){
+	find := false
+	for _, element := range joysticks{
+		if element.value == joy{
+			find  = true
+			break
+		}
+	}
+	if !find{
+		joysticks = append(joysticks, Joystick{value : joy})
+	}
+}
+
+//	- ### DisconnectJoystick(joy `int`)
+//		- > remove joystick from the joysticks list 
+// 
+//		- > return `void`
+// 
+func DisconnectJoystick(joy int){
+	var tempJoystick []Joystick
+	for _, element := range joysticks{
+		if element.value != joy{
+			tempJoystick = append(tempJoystick, element)
+			continue
+		}
+	}
+	joysticks = tempJoystick
+}
+
+//	- ### isJoyConnected(joy `int`)
+//		- > check if a joystick is connected
+// 
+//		- > return `bool`
+//
+func isJoyConnected(joy int) bool{
+	for _, element := range joysticks{
+		if element.value == joy{
+			return true
+		}
+	}
+	return false
 }

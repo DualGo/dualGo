@@ -73,8 +73,16 @@ func (engine *Engine) Init(width, height int, renderer *renderer.Renderer2D, tit
 	onKeyPressed := func(w *glfw.Window, key glfw.Key, scancode int, action glfw.Action, mods glfw.ModifierKey) {
 		input.SetKey(key, action)
 	}
+	joystickCallback := func(joy, event int){
+		if  event == 0x00040001 {
+			input.ConnectJoystick(joy)
+		}else if event == 0x00040002 {
+			input.DisconnectJoystick(joy)
+		} 
+	}
 	engine.window.SetSizeCallback(onResize)
 	engine.window.SetKeyCallback(onKeyPressed)
+	glfw.SetJoystickCallback(joystickCallback)
 
 	// Initialize Glow
 	if err := gl.Init(); err != nil {

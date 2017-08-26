@@ -198,3 +198,28 @@ func (sprite Sprite) GetOrigin() mgl32.Vec2 {
 func (sprite Sprite) GetShader() *shader.Shader {
 	return sprite.shader
 }
+
+//- ## Struct Rectangle `implements Drawable2D`
+
+type Rectangle struct{
+	position       mgl32.Vec2
+	size           mgl32.Vec2
+	origin         mgl32.Vec2
+	scale          float32
+	angle          float32
+	scaleMat       mgl32.Mat4
+	rotationMat    mgl32.Mat4
+	translationMat mgl32.Mat4
+	shader         *shader.Shader
+	err            error
+
+}
+
+//	- ### Init(position, size, `mgl32.Vec2`, shader.Shader)
+//		- > init the rectangle
+// 
+//		- > return `void`
+// 
+func (rectangle *Rectangle) Init(position, size mgl32.Vec2, shader *shader.Shader){
+	rectangle.shader = shader
+}

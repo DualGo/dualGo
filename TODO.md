@@ -8,8 +8,9 @@
 - [x] replace scale matrix by size 
 - [x] system de module
 - [ ] essayer de mettre la creation du model dans le renderer
-- [ ] faire un heritage et ajouter des primitives 
-- [ ] commenter le code
+- [ ] faire un heritage (avec un strcut drawable au lieu d'une interface ) et ajouter des primitives 
+    - [ ] rectangle 
+- [x] commenter le code
 - [x] go get
 - [x] créer un module Debug 
 - [x] ajouter du texte 
@@ -22,8 +23,10 @@
 - [ ] ajouter un callback pour disposer
 - [ ] swapInterval
 - [ ] texte qui ne reste pas dans la camera ( au choix )
-- [ ] integrer en interne glfont ? ( recupérer les shaders et ajouter la matrices de la caméra )0 
+- [ ] integrer en interne glfont ? ( recupérer les shaders et ajouter la matrices de la caméra ) interface ? 
 - [ ] bien organiser les constantes 
-- [ ] joystick input 
+- [x] joystick input 
 - [ ] mouse input 
 - [ ] garder une certaine logique nottament pour le move du         sprite
+- [ ] améliorer l'audio
+- [x] add performances to the joystick disconnection 
