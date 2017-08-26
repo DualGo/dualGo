@@ -17,7 +17,7 @@ import (
 // 
 //	- > Pop()
 // 
-//	- > GetShader() *shader.Shader
+//	- > GetShader() `*shader.Shader`
 // 
 type Drawable2D interface {
 	Push()
@@ -40,10 +40,10 @@ type Sprite struct {
 	err            error
 }
 
-//	- ### Init(position, size mgl32.Vec2, texturePath string, shader *shader.Shader)
+//	- ### Init(position, size `mgl32.Vec2`, texturePath `string`, shader `*shader.Shader`)
 //		- > init the sprite
 // 
-//		- > return void
+//		- > return `void`
 // 
 func (sprite *Sprite) Init(position, size mgl32.Vec2, texturePath string, shader *shader.Shader) {
 	sprite.shader = shader
@@ -65,7 +65,7 @@ func (sprite *Sprite) Init(position, size mgl32.Vec2, texturePath string, shader
 //	- ### Push()
 //		- > push sprite element to be rendered 
 // 
-//		- > return void
+//		- > return `void`
 // 
 func (sprite Sprite) Push() {
 	gl.ActiveTexture(gl.TEXTURE0)
@@ -85,25 +85,25 @@ func (sprite Sprite) Push() {
 //	- ### Pop()
 //		- > Pop elements 
 // 
-//		- > return void
+//		- > return `void`
 // 
 func (sprite Sprite) Pop() {
 	gl.BindTexture(gl.TEXTURE_2D, 0)
 }
 
-//	- ### Move(x, y float32)
+//	- ### Move(x, y `float32`)
 //		- > move the sprite
 // 
-//		- > return void
+//		- > return `void`
 // 
 func (sprite *Sprite) Move(x, y float32) {
 	sprite.SetPosition(mgl32.Vec2{sprite.position.X() + x, sprite.position.Y() + y})
 }
 
-//	- ### SetScale(scale float32)
+//	- ### SetScale(scale `float32`)
 //		- > set the scale of the scale 
 // 
-//		- > return void
+//		- > return `void`
 // 
 func (sprite *Sprite) SetScale(scale float32) {
 	sprite.scale = scale
@@ -112,16 +112,16 @@ func (sprite *Sprite) SetScale(scale float32) {
 //	- ### GetScale()
 //		- > return the scale of the sprite
 // 
-//		- > return float32
+//		- > return `float32`
 // 
 func (sprite Sprite) GetScale() float32 {
 	return sprite.scale
 }
 
-//	- ### SetAngle(angle float32)
+//	- ### SetAngle(angle `float32`)
 //		- > set rotation angle of the sprite
 // 
-//		- > return void
+//		- > return `void`
 // 
 func (sprite *Sprite) SetAngle(angle float32) {
 	sprite.angle = angle
@@ -130,16 +130,16 @@ func (sprite *Sprite) SetAngle(angle float32) {
 //	- ### GetAngle()
 //		- > return rotation angle of the sprite
 // 
-//		- > return float32
+//		- > return `float32`
 // 
 func (sprite Sprite) GetAngle() float32 {
 	return sprite.angle
 }
 
-//	- ### SetPosition(position mgl32.Vec2)
+//	- ### SetPosition(position `mgl32.Vec2`)
 //		- > set the position of the sprite
 // 
-//		- > return void
+//		- > return `void`
 // 
 func (sprite *Sprite) SetPosition(position mgl32.Vec2) {
 	sprite.position = position
@@ -148,16 +148,16 @@ func (sprite *Sprite) SetPosition(position mgl32.Vec2) {
 //	- ### GetPosition()
 //		- > return the position of the sprite
 // 
-//		- > return mgl32.Vec2
+//		- > return `mgl32.Vec2`
 // 
 func (sprite Sprite) GetPosition() mgl32.Vec2 {
 	return sprite.position
 }
 
-//	- ### SetSize(size  mgl32.Vec2)
+//	- ### SetSize(size  `mgl32.Vec2`)
 //		- > set the size of the sprite
 // 
-//		- > return void
+//		- > return `void`
 // 
 func (sprite *Sprite) SetSize(size mgl32.Vec2) {
 	sprite.size = size
@@ -166,16 +166,16 @@ func (sprite *Sprite) SetSize(size mgl32.Vec2) {
 //	- ### GetSize()
 //		- > return the size of the sprite
 // 
-//		- > return mgl32.Vec2
+//		- > return `mgl32.Vec2`
 // 
 func (sprite Sprite) GetSize() mgl32.Vec2 {
 	return sprite.size
 }
 
-//	- ### SetOrigin(origin mgl32.Vec2)
+//	- ### SetOrigin(origin `mgl32.Vec2`)
 //		- > set oririgin of the sprite
 // 
-//		- > return void
+//		- > return `void`
 // 
 func (sprite *Sprite) SetOrigin(origin mgl32.Vec2) {
 	sprite.origin = origin
@@ -184,7 +184,7 @@ func (sprite *Sprite) SetOrigin(origin mgl32.Vec2) {
 //	- ### GetOrigin()
 //		- > return the origin of the srite
 // 
-//		- > return mgl32.Vec2
+//		- > return `mgl32.Vec2`
 // 
 func (sprite Sprite) GetOrigin() mgl32.Vec2 {
 	return sprite.origin
@@ -193,7 +193,7 @@ func (sprite Sprite) GetOrigin() mgl32.Vec2 {
 //	- ### GetShader()
 //		- > return the sahder of the sprite
 // 
-//		- > return *shader.Shader
+//		- > return `*shader.Shader`
 // 
 func (sprite Sprite) GetShader() *shader.Shader {
 	return sprite.shader

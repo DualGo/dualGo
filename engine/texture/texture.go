@@ -14,7 +14,7 @@ import (
 
 	"github.com/DualGo/gl/v4.1-core/gl"
 )
-//- # Struct Font
+//- ## Struct Font
 //	- #### Name `string`
 // 	- #### Value `*glfont.Font`
 type Font struct {

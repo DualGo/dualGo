@@ -16,6 +16,12 @@ import (
 	"github.com/DualGo/glfw/v3.2/glfw"
 )
 
+// - ## func InitFunc
+// - ## func UpdateFunc
+type InitFunc func()
+type UpdateFunc func()
+
+// - ## Struct Engine
 type Engine struct {
 	width    int
 	height   int
@@ -25,10 +31,12 @@ type Engine struct {
 	modules  []extends.Module
 	renderer *renderer.Renderer2D
 }
-type InitFunc func()
-type UpdateFunc func()
 
-/*Init all components require by opengl and the engine*/
+//	- ### Init(width, height int, renderer `*renderer.Renderer2D`)
+//		- > init glfw and opengl
+// 
+//		- > return `void`
+// 
 func (engine *Engine) Init(width, height int, renderer *renderer.Renderer2D, title string, callbackInit InitFunc, callbackUpdate UpdateFunc) {
 
 	engine.renderer = renderer
@@ -86,7 +94,29 @@ func (engine *Engine) Init(width, height int, renderer *renderer.Renderer2D, tit
 	engine.loop(callbackUpdate)
 }
 
-/* render loop */
+//	- ### AddObect(object `d2d.Drawable2D`)
+//		- > add object to object list  
+// 
+//		- > return `void`
+// 
+func (engine *Engine) AddObject(object d2d.Drawable2D) {
+	engine.objects = append(engine.objects, object)
+}
+
+//	- ### AddModule(module `extends.Module`)
+//		- > add module to module list  
+// 
+//		- > return `void`
+// 
+func (engine *Engine) AddModule(module extends.Module) {
+	engine.modules = append(engine.modules, module)
+}
+
+//	- ### loop(callback `UpdateFunc`)
+//		- > main loop, call update function 
+// 
+//		- > return `void`
+// 
 func (engine *Engine) loop(callback UpdateFunc) {
 	for !engine.window.ShouldClose() {
 		gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
@@ -106,12 +136,4 @@ func (engine *Engine) loop(callback UpdateFunc) {
 		engine.window.SwapBuffers()
 		glfw.PollEvents()
 	}
-}
-
-func (engine *Engine) AddObject(object d2d.Drawable2D) {
-	engine.objects = append(engine.objects, object)
-}
-
-func (engine *Engine) AddModule(module extends.Module) {
-	engine.modules = append(engine.modules, module)
 }

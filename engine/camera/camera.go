@@ -16,10 +16,10 @@ type Camera2D struct {
 	position          mgl32.Vec2
 }
 
-//	- ### Init(shader *shader.Shader, width, height int)
+//	- ### Init(shader `*shader.Shader`, width, height `int`)
 //		- > init the camera ( create projection )
 // 
-//		- > return void
+//		- > return `void`
 // 
 func (camera *Camera2D) Init(shader *shader.Shader, width, height int) {
 
@@ -33,10 +33,10 @@ func (camera *Camera2D) Init(shader *shader.Shader, width, height int) {
 
 }
 
-//	- ### Update(shader *shader.Shader)
+//	- ### Update(shader `*shader.Shader`)
 //		- > update camera ( move viewport etc )
 // 
-//		- > return void
+//		- > return `void`
 // 
 func (camera *Camera2D) Update(shader *shader.Shader) {
 	gl.Viewport(0, 0, int32(camera.size.X()), int32(camera.size.Y()))
@@ -46,10 +46,10 @@ func (camera *Camera2D) Update(shader *shader.Shader) {
 
 }
 
-//	- ### Move(vector mgl32.Vec2)
+//	- ### Move(vector `mgl32.Vec2`)
 //		- > move the camera
 // 
-//		- > return void
+//		- > return `void`
 // 
 func (camera *Camera2D) Move(vector mgl32.Vec2) {
 	camera.position = mgl32.Vec2{camera.position.X() + vector.X(), camera.position.Y() + vector.Y()}
@@ -67,16 +67,16 @@ func (camera *Camera2D) SetPosition(position mgl32.Vec2) {
 //	- ### GetPosition()
 //		- > get the position of the camera
 // 
-//		- > return mgl32.Vec2
+//		- > return `mgl32.Vec2`
 // 
 func (camera Camera2D) GetPosition() mgl32.Vec2 {
 	return camera.position
 }
 
-//	- ### SetSize(size mgl32.Vec2)
+//	- ### SetSize(size `mgl32.Vec2`)
 //		- > set the size of the camera
 // 
-//		- > return void
+//		- > return `void`
 // 
 func (camera *Camera2D) SetSize(size mgl32.Vec2) {
 	camera.size = size
@@ -85,7 +85,7 @@ func (camera *Camera2D) SetSize(size mgl32.Vec2) {
 //	- ### GetSize()
 //		- > get the size of the camera
 // 
-//		- > return mgl32.Vec2
+//		- > return `mgl32.Vec2`
 // 
 func (camera Camera2D) GetSize() mgl32.Vec2 {
 	return camera.size

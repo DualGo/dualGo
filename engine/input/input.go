@@ -4,9 +4,9 @@ package input
 import "github.com/DualGo/glfw/v3.2/glfw"
 
 //- ## Const 
-//	- ##### KEYDOWN = 1 	`state of key`
-//	- ##### KEYUP = 0 	`state of key`
-//	- ##### KEYPRESS = 2 	`state of key`
+//	- ##### KEYDOWN = 1 `int`	*state of key*
+//	- ##### KEYUP = 0 `int`	*state of key*
+//	- ##### KEYPRESS = 2 `int`	*state of key*
 const (
 	KEYDOWN  = 1
 	KEYUP    = 0
@@ -14,7 +14,7 @@ const (
 )
 
 //- ## Var 
-//	- #### keys type []Key `store keys of the input system` 
+//	- #### keys type `[]Key` *store keys of the input system* 
 var keys []Key
 
 
@@ -24,10 +24,10 @@ type Key struct {
 	action  glfw.Action
 }
 
-//	- ### GetKey(keycode gflw.key)
+//	- ### GetKey(keycode `gflw.key`)
 //		- > return the state of a key 
 // 
-//		- > return int
+//		- > return `int`
 // 
 func GetKey(keycode glfw.Key) int {
 	for _, element := range keys {
@@ -38,10 +38,10 @@ func GetKey(keycode glfw.Key) int {
 	return 0
 }
 
-//	- ### SetKey(keycode gflw.Key, action gflw.Action)
+//	- ### SetKey(keycode `gflw.Key`, action `gflw.Action`)
 //		- > addKey to input system
 // 
-//		- > return void
+//		- > return `void`
 // 
 func SetKey(keycode glfw.Key, action glfw.Action) {
 	keys = append(keys, Key{keycode, action})
@@ -50,7 +50,7 @@ func SetKey(keycode glfw.Key, action glfw.Action) {
 //	- ### RemoveKeys()
 //		- > clear the input system 
 // 
-//		- > return void
+//		- > return `void`
 // 
 func RemoveKeys() {
 	keys = nil

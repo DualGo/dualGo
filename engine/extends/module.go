@@ -7,11 +7,11 @@ import (
 )
 
 //- ## Interface Module
-//	- > Init(objects []d2d.Drawable2D)
+//	- > Init(objects `[]d2d.Drawable2D`)
 // 
-//	- > Update(renderer *renderer.Renderer2D)
+//	- > Update(renderer `*renderer.Renderer2D`)
 // 
-//	- > GetUpdatePosition() string
+//	- > GetUpdatePosition() `string`
 // 
 type Module interface {
 	Init(objects []d2d.Drawable2D)
