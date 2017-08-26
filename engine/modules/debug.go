@@ -8,7 +8,7 @@ import (
 	"github.com/DualGo/glfw/v3.2/glfw"
 	"github.com/DualGo/mathgl/mgl32"
 )
-
+//- ## Struct Debug
 type Debug struct {
 	extends.Module
 	fps      int32
@@ -17,6 +17,11 @@ type Debug struct {
 	color    mgl32.Vec4
 }
 
+//	- ### Init(objects []d2d.Drawable2D)
+//		- > init the debug module 
+// 
+//		- > return void 
+// 
 func (debug *Debug) Init(objects []d2d.Drawable2D) {
 	debug.fps = 16
 	debug.lastFps = 16
@@ -24,6 +29,11 @@ func (debug *Debug) Init(objects []d2d.Drawable2D) {
 	debug.lastTime = 0
 }
 
+//	- ### Update(renderer *renderer.Renderer2D)
+//		- > update the  debug module 
+// 
+//		- > return void 
+// 
 func (debug *Debug) Update(renderer *renderer.Renderer2D) {
 	renderer.DrawText(10, 50, 0.5, "DEBUG MODE ACTIVATED", debug.color)
 	currentTime := glfw.GetTime()
@@ -39,10 +49,20 @@ func (debug *Debug) Update(renderer *renderer.Renderer2D) {
 
 }
 
+//	- ### GetUpdatePosition()
+//		- > return the udpate poisition ( first, midle, last ) 
+// 
+//		- > return string
+// 
 func (debuf *Debug) GetUpdatePosition() string {
 	return "last"
 }
 
+//- ### String(n int32)
+//	- > convert int32 into string 
+// 
+//	- > return string
+// 
 func String(n int32) string {
 	buf := [11]byte{}
 	pos := len(buf)

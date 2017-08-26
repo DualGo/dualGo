@@ -3,19 +3,26 @@ package input
 // # Package input
 import "github.com/DualGo/glfw/v3.2/glfw"
 
-//- ## Struct Key 
-type Key struct {
-	keycode glfw.Key
-	action  glfw.Action
-}
-
+//- ## Const 
+//	- ##### KEYDOWN = 1 	`state of key`
+//	- ##### KEYUP = 0 	`state of key`
+//	- ##### KEYPRESS = 2 	`state of key`
 const (
 	KEYDOWN  = 1
 	KEYUP    = 0
 	KEYPRESS = 2
 )
 
+//- ## Var 
+//	- #### keys type []Key `store keys of the input system` 
 var keys []Key
+
+
+//- ## Struct Key 
+type Key struct {
+	keycode glfw.Key
+	action  glfw.Action
+}
 
 //	- ### GetKey(keycode gflw.key)
 //		- > return the state of a key 

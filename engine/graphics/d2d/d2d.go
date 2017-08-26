@@ -24,6 +24,7 @@ type Drawable2D interface {
 	Pop()
 	GetShader() *shader.Shader
 }
+//- ## Struct Sprite `implements Drawable2D`
 
 type Sprite struct {
 	position       mgl32.Vec2
@@ -39,10 +40,10 @@ type Sprite struct {
 	err            error
 }
 
-//- ### Init(position, size mgl32.Vec2, texturePath string, shader *shader.Shader)
-//	- > init the sprite
+//	- ### Init(position, size mgl32.Vec2, texturePath string, shader *shader.Shader)
+//		- > init the sprite
 // 
-//  - > return void
+//		- > return void
 // 
 func (sprite *Sprite) Init(position, size mgl32.Vec2, texturePath string, shader *shader.Shader) {
 	sprite.shader = shader
@@ -61,6 +62,11 @@ func (sprite *Sprite) Init(position, size mgl32.Vec2, texturePath string, shader
 
 }
 
+//	- ### Push()
+//		- > push sprite element to be rendered 
+// 
+//		- > return void
+// 
 func (sprite Sprite) Push() {
 	gl.ActiveTexture(gl.TEXTURE0)
 	gl.BindTexture(gl.TEXTURE_2D, sprite.texture)
@@ -76,55 +82,119 @@ func (sprite Sprite) Push() {
 	gl.UniformMatrix4fv(modelUniform, 1, false, &model[0])
 
 }
-
+//	- ### Pop()
+//		- > Pop elements 
+// 
+//		- > return void
+// 
 func (sprite Sprite) Pop() {
 	gl.BindTexture(gl.TEXTURE_2D, 0)
 }
 
+//	- ### Move(x, y float32)
+//		- > move the sprite
+// 
+//		- > return void
+// 
 func (sprite *Sprite) Move(x, y float32) {
 	sprite.SetPosition(mgl32.Vec2{sprite.position.X() + x, sprite.position.Y() + y})
 }
 
+//	- ### SetScale(scale float32)
+//		- > set the scale of the scale 
+// 
+//		- > return void
+// 
 func (sprite *Sprite) SetScale(scale float32) {
 	sprite.scale = scale
 }
 
+//	- ### GetScale()
+//		- > return the scale of the sprite
+// 
+//		- > return float32
+// 
 func (sprite Sprite) GetScale() float32 {
 	return sprite.scale
 }
 
+//	- ### SetAngle(angle float32)
+//		- > set rotation angle of the sprite
+// 
+//		- > return void
+// 
 func (sprite *Sprite) SetAngle(angle float32) {
 	sprite.angle = angle
 }
 
+//	- ### GetAngle()
+//		- > return rotation angle of the sprite
+// 
+//		- > return float32
+// 
 func (sprite Sprite) GetAngle() float32 {
 	return sprite.angle
 }
 
+//	- ### SetPosition(position mgl32.Vec2)
+//		- > set the position of the sprite
+// 
+//		- > return void
+// 
 func (sprite *Sprite) SetPosition(position mgl32.Vec2) {
 	sprite.position = position
 }
 
+//	- ### GetPosition()
+//		- > return the position of the sprite
+// 
+//		- > return mgl32.Vec2
+// 
 func (sprite Sprite) GetPosition() mgl32.Vec2 {
 	return sprite.position
 }
 
+//	- ### SetSize(size  mgl32.Vec2)
+//		- > set the size of the sprite
+// 
+//		- > return void
+// 
 func (sprite *Sprite) SetSize(size mgl32.Vec2) {
 	sprite.size = size
 }
 
+//	- ### GetSize()
+//		- > return the size of the sprite
+// 
+//		- > return mgl32.Vec2
+// 
 func (sprite Sprite) GetSize() mgl32.Vec2 {
 	return sprite.size
 }
 
+//	- ### SetOrigin(origin mgl32.Vec2)
+//		- > set oririgin of the sprite
+// 
+//		- > return void
+// 
 func (sprite *Sprite) SetOrigin(origin mgl32.Vec2) {
 	sprite.origin = origin
 }
 
+//	- ### GetOrigin()
+//		- > return the origin of the srite
+// 
+//		- > return mgl32.Vec2
+// 
 func (sprite Sprite) GetOrigin() mgl32.Vec2 {
 	return sprite.origin
 }
 
+//	- ### GetShader()
+//		- > return the sahder of the sprite
+// 
+//		- > return *shader.Shader
+// 
 func (sprite Sprite) GetShader() *shader.Shader {
 	return sprite.shader
 }

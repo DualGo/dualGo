@@ -7,7 +7,9 @@ import (
 
 	"github.com/DualGo/gl/v4.1-core/gl"
 )
-
+// - ## Const
+//	- #### vertexShaderSource `string` *default vertex shader*
+//	- #### fragmentShaderSource `string` *default fragment shader*
 const (
 	vertexShaderSource = `
 	#version 330
@@ -34,12 +36,18 @@ const (
 	` + "\x00"
 )
 
+//- # Struct Shader
 type Shader struct {
 	vertexShader   uint32
 	fragmentShader uint32
 	prog           uint32
 }
 
+//	- ### Init(vertexSource, fragmentSource `string`)
+//		- > init the shader ( use default if parameters are nil string )
+// 
+//		- > return `void`
+// 
 func (this *Shader) Init(vertexSource, fragmentSource string) error {
 	var err error
 	if vertexSource != "" {
@@ -67,10 +75,29 @@ func (this *Shader) Init(vertexSource, fragmentSource string) error {
 	return nil
 }
 
+//	- ### Use()
+//		- > use the shader program
+// 
+//		- > return `void`
+// 
 func (this *Shader) Use() {
 	gl.UseProgram(this.prog)
 }
 
+//	- ### GetProgram()
+//		- > return the shader program
+// 
+//		- > return `uint32`
+// 
+func (this *Shader) GetProgram() uint32 {
+	return this.prog
+}
+
+//- ### compileShader(source `string`, shaderType `uint32`)
+//	- > compile shader
+// 
+//	- > return `uint32`, `error`
+// 
 func compileShader(source string, shaderType uint32) (uint32, error) {
 	shader := gl.CreateShader(shaderType)
 
@@ -92,8 +119,4 @@ func compileShader(source string, shaderType uint32) (uint32, error) {
 	}
 
 	return shader, nil
-}
-
-func (this *Shader) GetProgram() uint32 {
-	return this.prog
 }

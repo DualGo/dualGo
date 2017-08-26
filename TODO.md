@@ -26,3 +26,4 @@
 - [ ] bien organiser les constantes 
 - [ ] joystick input 
 - [ ] mouse input 
+- [ ] garder une certaine logique nottament pour le move du         sprite

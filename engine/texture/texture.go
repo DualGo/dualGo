@@ -14,12 +14,19 @@ import (
 
 	"github.com/DualGo/gl/v4.1-core/gl"
 )
-
+//- # Struct Font
+//	- #### Name `string`
+// 	- #### Value `*glfont.Font`
 type Font struct {
 	Name  string
 	Value *glfont.Font
 }
 
+//- ### NewTexture(from, file `string`)
+//	- > create a new opengl texture
+// 
+//	- > return `uint32`, `error`
+// 
 func NewTexture(from, file string) (uint32, error) {
 	dir, err := importPathToDir(from)
 	if err != nil {
@@ -66,6 +73,11 @@ func NewTexture(from, file string) (uint32, error) {
 	return texture, nil
 }
 
+//- ### importPathToDir(importPath `string`)
+//	- > change the main path 
+// 
+//	- > return `string`, `error`
+// 
 func importPathToDir(importPath string) (string, error) {
 	p, err := build.Import(importPath, "", build.FindOnly)
 	if err != nil {
