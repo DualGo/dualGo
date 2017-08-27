@@ -7,6 +7,7 @@ import (
 	"github.com/DualGo/dualGo/engine/renderer"
 	"github.com/DualGo/glfw/v3.2/glfw"
 	"github.com/DualGo/mathgl/mgl32"
+	"github.com/DualGo/dualGo/engine/utils"
 )
 //- ## Struct Debug
 type Debug struct {
@@ -35,16 +36,20 @@ func (debug *Debug) Init(objects []d2d.Drawable2D) {
 //		- > return `void`
 // 
 func (debug *Debug) Update(renderer *renderer.Renderer2D) {
-	renderer.DrawText(10, 50, 0.5, "DEBUG MODE ACTIVATED", debug.color)
-	currentTime := glfw.GetTime()
-	debug.fps++
-	if currentTime-debug.lastTime >= 1.0 {
-		renderer.DrawText(10, 75, 0.5, String(1000/debug.fps), debug.color)
-		debug.lastFps = debug.fps
-		debug.fps = 0
-		debug.lastTime = glfw.GetTime()
-	} else {
-		renderer.DrawText(10, 75, 0.5, String(1000/debug.lastFps), debug.color)
+	if constants.Param.Debug{
+		renderer.DrawText(10, 50, 0.5, "DEBUG MODE ACTIVATED", debug.color)
+		//joystick debuging 
+		renderer.DrawText(10,75, 0.5, "MS : ", debug.color)
+		currentTime := glfw.GetTime()
+		debug.fps++
+		if currentTime-debug.lastTime >= 1.0 {
+			renderer.DrawText(70, 75, 0.5, String(1000/debug.fps), debug.color)
+			debug.lastFps = debug.fps
+			debug.fps = 0
+			debug.lastTime = glfw.GetTime()
+		} else {
+			renderer.DrawText(70, 75, 0.5, String(1000/debug.lastFps), debug.color)
+		}
 	}
 
 }
