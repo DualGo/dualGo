@@ -31,5 +31,8 @@
 - [ ] améliorer l'audio
 - [x] add performances to the joystick disconnection 
 - [ ] verifier joystick deconnection nottament 
-- [ ] séparer texture et sprite 
+- [ ] séparer texture et sprite avec une classe pour les textures 
 - [ ] vérifier le système de shader (enable textCoord que pour sprite)
+- [ ] pb joystick 
+- [ ] pb keyboard with joystick
+- [ ] joystick qui envoie des valeur même sans bouger 

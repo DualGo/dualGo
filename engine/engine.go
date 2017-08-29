@@ -130,14 +130,14 @@ func (engine *Engine) loop(callback UpdateFunc) {
 		gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 		for _, element := range engine.modules {
 			if element.GetUpdatePosition() == "first" {
-				element.Update(engine.renderer)
+				element.Update(engine.renderer,engine.objects)
 			}
 
 		}
 		callback()
 		for _, element := range engine.modules {
 			if element.GetUpdatePosition() == "last" {
-				element.Update(engine.renderer)
+				element.Update(engine.renderer, engine.objects)
 			}
 		}
 		input.RemoveKeys()

@@ -15,6 +15,6 @@ import (
 // 
 type Module interface {
 	Init(objects []d2d.Drawable2D)
-	Update(renderer *renderer.Renderer2D)
+	Update(renderer *renderer.Renderer2D, objects []d2d.Drawable2D)
 	GetUpdatePosition() string
 }

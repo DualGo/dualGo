@@ -16,20 +16,61 @@ const(
 	#version 330 core
 	uniform mat4 projection; 
 	uniform mat4 model;
+	uniform	vec4 color;
+	uniform float stroke;
 	in vec3 vertexPosition;
 	in vec2 vertTexCoord;
+	out vec4 colorIn;
+	out vec4 position;
+	out float strokeIn;
 	void main(){
+		colorIn = color;
 		gl_Position = projection*model*vec4(vertexPosition, 1);
-	
+		position = vec4(vertexPosition, 1);
+		strokeIn = stroke;
 	}
 	` + "\x00"
 	rectangleFragmentShaderSource = `
 	#version 330 core
+	in vec4 colorIn;
+	in vec4 position;
+	in float strokeIn;
 	out vec4 color;
 	void main(){
-  		color = ;
+		if(position.y > (1-strokeIn) || position.y < (0+strokeIn)){
+			color = colorIn;
+				
+		}
+		else if(position.x > (1-strokeIn)|| position.x < (0+strokeIn)){
+			color = colorIn;
+		}
+  		
 	}
 	` + "\x00"
+
+	spriteVertexShaderSource = `
+	#version 330 core
+	uniform mat4 projection; 
+	uniform mat4 model;
+	in vec3 vertexPosition;
+	in vec2 vertTexCoord;
+	out vec2 fragTexCoord;
+	void main(){
+		fragTexCoord = vertTexCoord;
+		gl_Position = projection*model*vec4(vertexPosition, 1);
+	
+	}
+	` + "\x00"
+	spriteFragmentShaderSource = `
+	#version 330 core
+	uniform sampler2D tex;
+	in vec2 fragTexCoord;
+	out vec4 color;
+	void main(){
+			color = texture(tex, fragTexCoord);
+	}
+	` + "\x00"
+
 )
 
 //- ## Interface Drawable2D
@@ -42,8 +83,9 @@ const(
 type Drawable2D interface {
 	Push()
 	Pop()
-	GetShader() *shader.Shader
-	IsTextured() bool
+	GetPosition() mgl32.Vec2
+	GetSize() 	  mgl32.Vec2
+	GetShader()  *shader.Shader
 }
 
 //- ## Struct Rectangle `implements Drawable2D`
@@ -54,11 +96,12 @@ type Rectangle struct{
 	origin         mgl32.Vec2
 	scale          float32
 	angle          float32
-	color		   mgl32.Vec4		
+	color		   mgl32.Vec4	
+	stroke		   float32	
 	scaleMat       mgl32.Mat4
 	rotationMat    mgl32.Mat4
 	translationMat mgl32.Mat4
-	shader         *shader.Shader
+	shader         shader.Shader
 	err            error
 
 }
@@ -68,8 +111,8 @@ type Rectangle struct{
 // 
 //		- > return `void`
 // 
-func (rectangle *Rectangle) Init(position, size mgl32.Vec2, shader *shader.Shader){
-	rectangle.shader = shader
+func (rectangle *Rectangle) Init(position, size mgl32.Vec2){
+	rectangle.shader.Init(rectangleVertexShaderSource, rectangleFragmentShaderSource)
 	rectangle.shader.Use()
 	rectangle.position = position
 	rectangle.size = size
@@ -77,6 +120,7 @@ func (rectangle *Rectangle) Init(position, size mgl32.Vec2, shader *shader.Shade
 	rectangle.scale = 1
 	rectangle.angle = 0
 	rectangle.color = constants.Param.DefaultColor
+	rectangle.stroke = 0.01
 	gl.UseProgram(0)
 }
 
@@ -94,6 +138,12 @@ func (rectangle Rectangle) Push(){
 
 	modelUniform := gl.GetUniformLocation(rectangle.shader.GetProgram(), gl.Str("model\x00"))
 	gl.UniformMatrix4fv(modelUniform, 1, false, &model[0])
+
+	colorUniform := gl.GetUniformLocation(rectangle.shader.GetProgram(), gl.Str("color\x00"))
+	gl.Uniform4f(colorUniform, rectangle.color.X(),rectangle.color.Y(), rectangle.color.Z(),rectangle.color.W())
+
+	stokeUniform := gl.GetUniformLocation(rectangle.shader.GetProgram(), gl.Str("stroke\x00"))
+	gl.Uniform1f(stokeUniform, rectangle.stroke)
 }
 
 //	- ### Pop()
@@ -214,13 +264,49 @@ func (rectangle Rectangle) GetOrigin() mgl32.Vec2 {
 	return rectangle.origin
 }
 
+//	- ### SetColor( `mgl32.Vec4` )
+//		- > set the color of the rectangle
+// 
+//		- > return `void`
+// 
+func (rectangle *Rectangle) SetColor(color mgl32.Vec4){
+	rectangle.color = color
+}
+
+//	- ### GetColor()
+//		- > return the color of the rectangle
+// 
+//		- > return `mgl32.Vec4`
+// 
+func (rectangle Rectangle) GetColor() mgl32.Vec4{
+	return rectangle.color
+}
+
+//	- ### SetStroke(stroke `float32`)
+//		- > set stroke of the rectangle
+// 
+//		- > return `void`
+// 
+func (rectangle *Rectangle) SetStroke(stroke float32) {
+	rectangle.stroke = stroke
+}
+
+//	- ### GetStroke()
+//		- > return the stroke of the rectangle
+// 
+//		- > return `float32`
+// 
+func (rectangle Rectangle) GetStroke() float32 {
+	return rectangle.stroke
+}
+
 //	- ### GetShader()
-//		- > return the sahder of the rectangle
+//		- > return the shader of the rectangle
 // 
 //		- > return `*shader.Shader`
 // 
 func (rectangle Rectangle) GetShader() *shader.Shader {
-	return rectangle.shader
+	return &rectangle.shader
 }
 
 //- ## Struct Sprite `implements Drawable2D`
@@ -235,8 +321,9 @@ type Sprite struct {
 // 
 //		- > return `void`
 // 
-func (sprite *Sprite) Init(position, size mgl32.Vec2, texturePath string, shader *shader.Shader) {
-	sprite.rectangle.Init(position, size, shader)
+func (sprite *Sprite) Init(position, size mgl32.Vec2, texturePath string) {
+	sprite.rectangle.Init(position, size)
+	sprite.rectangle.shader.Init(spriteVertexShaderSource, spriteFragmentShaderSource)
 	//load texture
 	sprite.texture, sprite.rectangle.err = texture.NewTexture(constants.Param.TexturePath, texturePath)
 	if sprite.rectangle.err != nil {
@@ -380,7 +467,7 @@ func (sprite Sprite) GetOrigin() mgl32.Vec2 {
 //		- > return `*shader.Shader`
 // 
 func (sprite Sprite) GetShader() *shader.Shader {
-	return sprite.rectangle.shader
+	return &sprite.rectangle.shader
 }
 
 
