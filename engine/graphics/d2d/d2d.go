@@ -11,6 +11,26 @@ import (
 	"github.com/DualGo/gl/v4.1-core/gl"
 	"github.com/DualGo/mathgl/mgl32"
 )
+const(
+	rectangleVertexShaderSource = `
+	#version 330 core
+	uniform mat4 projection; 
+	uniform mat4 model;
+	in vec3 vertexPosition;
+	in vec2 vertTexCoord;
+	void main(){
+		gl_Position = projection*model*vec4(vertexPosition, 1);
+	
+	}
+	` + "\x00"
+	rectangleFragmentShaderSource = `
+	#version 330 core
+	out vec4 color;
+	void main(){
+  		color = ;
+	}
+	` + "\x00"
+)
 
 //- ## Interface Drawable2D
 //	- > Push()
@@ -23,6 +43,7 @@ type Drawable2D interface {
 	Push()
 	Pop()
 	GetShader() *shader.Shader
+	IsTextured() bool
 }
 
 //- ## Struct Rectangle `implements Drawable2D`
@@ -82,6 +103,16 @@ func (rectangle Rectangle) Push(){
 // 
 func (rectangle Rectangle) Pop(){
 
+}
+
+//	- ### IsTextured() 
+//		- > to know if a primitive is textured
+// 
+//		- > return `bool`
+// 
+
+func (rectangle Rectangle) IsTextured() bool {
+	return false
 }
 
 //	- ### Move(x, y `float32`)
@@ -232,6 +263,16 @@ func (sprite Sprite) Push() {
 func (sprite Sprite) Pop() {
 	gl.BindTexture(gl.TEXTURE_2D, 0)
 	sprite.rectangle.Pop()
+}
+
+//	- ### IsTextured() 
+//		- > to know if a primitive is textured
+// 
+//		- > return `bool`
+// 
+
+func (sprite Sprite) IsTextured() bool {
+	return false
 }
 
 //	- ### Move(x, y `float32`)

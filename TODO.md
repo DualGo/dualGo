@@ -30,6 +30,6 @@
 - [ ] garder une certaine logique nottament pour le move du         sprite
 - [ ] améliorer l'audio
 - [x] add performances to the joystick disconnection 
-- [ ] verifier joystick 
+- [ ] verifier joystick deconnection nottament 
 - [ ] séparer texture et sprite 
-- [ ] vérifier le système de shader 
+- [ ] vérifier le système de shader (enable textCoord que pour sprite)

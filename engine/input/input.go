@@ -65,7 +65,10 @@ type Joystick struct{
 }
 
 func GetAxe(joy, axe int) float32{
-	return glfw.GetJoystickAxes(glfw.Joystick(joy))[axe]
+	if isJoyConnected(joy){
+		return glfw.GetJoystickAxes(glfw.Joystick(joy))[axe]
+	}
+	return 0
 }
 
 //	- ### ConnectJoystick(joy `int`)
