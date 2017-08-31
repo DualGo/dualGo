@@ -1,6 +1,5 @@
 package renderer
 
-// # Package renderer
 import (
 	"unsafe"
 
@@ -15,9 +14,6 @@ import (
 	"github.com/DualGo/gl/v4.1-core/gl"
 )
 
-//- ## Const 
-//	- #### vertexShaderSource `string` *a simple vertex shader*
-//	- #### fragmentShaderSource `string` *a simple fragment shader*
 const (
 	vertexShaderSource = `
 	#version 330 core
@@ -43,7 +39,6 @@ const (
 	` + "\x00"
 )
 
-//- ## Struct Renderer2D
 type Renderer2D struct {
 	width, height  int
 	shader         shader.Shader
@@ -55,11 +50,6 @@ type Renderer2D struct {
 	fontIndex      int
 }
 
-//	- ### Init(vertexShader, fragmentShader `string`)
-//		- > init the renderer with shader
-// 
-//		- > return `void`
-// 
 func (renderer *Renderer2D) Init(vertexShader, fragmentShader string) {
 	renderer.width, renderer.height = 800, 600
 	renderer.fontIndex = 0
@@ -79,11 +69,6 @@ func (renderer *Renderer2D) Init(vertexShader, fragmentShader string) {
 	gl.UseProgram(0)
 }
 
-//	- ### Draw(drawable `d2d.Drawable2D`)
-//		- > draw a drawable element 
-// 
-//		- > return `void`
-// 
 func (renderer *Renderer2D) Draw(drawable d2d.Drawable2D) {
 	drawable.GetShader().Use()
 	renderer.camera.Update(drawable.GetShader())
@@ -105,22 +90,12 @@ func (renderer *Renderer2D) Draw(drawable d2d.Drawable2D) {
 
 }
 
-//	- ### DrawText(x, y, scale `float32`, text `string`, color `mgl32.Vec4`)
-//		- > draw text a the x, y position with color and scale
-// 
-//		- > return `void`
-// 
 func (renderer *Renderer2D) DrawText(x, y, scale float32, text string, color mgl32.Vec4) {
 	renderer.camera.Update(&renderer.shader)
 	renderer.fonts[renderer.fontIndex].Value.SetColor(color.X(), color.Y(), color.Z(), color.W())
 	renderer.fonts[renderer.fontIndex].Value.Printf(x, y, scale, text)
 }
 
-//	- ### LoadFont(path `string`, scale `int32`, fontName `string`)
-//		- > load a font
-// 
-//		- > return `error`
-// 
 func (renderer *Renderer2D) LoadFont(path string, scale int32, fontName string) error {
 	font, err := glfont.LoadFont(path, scale, renderer.width, renderer.height)
 	if err != nil {
@@ -131,67 +106,32 @@ func (renderer *Renderer2D) LoadFont(path string, scale int32, fontName string) 
 	return nil
 }
 
-//	- ### SetWidth(width `int`)
-//		- > set the camera and renderer width
-// 
-//		- > return `void`
-// 
 func (renderer *Renderer2D) SetWidth(width int) {
 	renderer.width = width
 	renderer.camera.SetSize(mgl32.Vec2{float32(width), renderer.camera.GetSize().Y()})
 }
 
-//	- ### GetWidth()
-//		- > return the renderer width
-// 
-//		- > return `int`
-// 
 func (renderer Renderer2D) GetWidth() int {
 	return renderer.width
 }
 
-//	- ### SetHeight(height `int`)
-//		- > set the renderer and the camera height
-// 
-//		- > return `void`
-// 
 func (renderer *Renderer2D) SetHeight(height int) {
 	renderer.height = height
 	renderer.camera.SetSize(mgl32.Vec2{renderer.camera.GetSize().X(), float32(height)})
 }
 
-//	- ### GetHeight()
-//		- > return the renderer height
-// 
-//		- > return `int`
-// 
 func (renderer Renderer2D) GetHeight() int {
 	return renderer.height
 }
 
-//	- ### GetCamera()
-//		- > return the renderer camera
-// 
-//		- > return `*camera.Camera2D`
-// 
 func (renderer *Renderer2D) GetCamera() *camera.Camera2D {
 	return &renderer.camera
 }
 
-//	- ### GetShader()
-//		- > return the renderer shader
-// 
-//		- > return `*shader.Shader`
-// 
 func (renderer *Renderer2D) GetShader() *shader.Shader {
 	return &renderer.shader
 }
 
-//	- ### SetFont(fontName `string`)
-//		- > change the renderer currentFont
-// 
-//		- > return `void`
-// 
 func (renderer *Renderer2D) SetFont(fontName string) {
 	for index, element := range renderer.fonts {
 		if element.Name == fontName {
@@ -200,11 +140,6 @@ func (renderer *Renderer2D) SetFont(fontName string) {
 	}
 }
 
-//	- ### GetFont(fontName `string`)
-//		- > return a font store in the renderer
-// 
-//		- > return `*glfont.Font`
-// 
 func (renderer *Renderer2D) GetFont(fontName string) *glfont.Font {
 	for _, element := range renderer.fonts {
 		if element.Name == fontName {
@@ -214,11 +149,6 @@ func (renderer *Renderer2D) GetFont(fontName string) *glfont.Font {
 	return nil
 }
 
-//	- ### initVao()
-//		- > init vertex array object used by the renderer 
-// 
-//		- > return `void`
-// 
 func (renderer *Renderer2D) initVao() {
 	gl.GenVertexArrays(1, &renderer.vao)
 	gl.BindVertexArray(renderer.vao)

@@ -9,7 +9,7 @@
 - [x] system de module
 - [ ] essayer de mettre la creation du model dans le renderer
 - [ ] faire un heritage (avec un strcut drawable au lieu d'une interface ) et ajouter des primitives 
-    - [ ] rectangle 
+    - [x] rectangle 
 - [x] commenter le code
 - [x] go get
 - [x] créer un module Debug 
@@ -32,7 +32,7 @@
 - [x] add performances to the joystick disconnection 
 - [ ] verifier joystick deconnection nottament 
 - [ ] séparer texture et sprite avec une classe pour les textures 
-- [ ] vérifier le système de shader (enable textCoord que pour sprite)
 - [ ] pb joystick 
 - [ ] pb keyboard with joystick
 - [ ] joystick qui envoie des valeur même sans bouger 
+- [ ] faire un heritage pour pouvoir ajouter le renderer 3D 

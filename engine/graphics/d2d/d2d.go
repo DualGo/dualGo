@@ -1,6 +1,5 @@
 package d2d
 
-// # Package d2d
 import (
 	"log"
 
@@ -11,7 +10,8 @@ import (
 	"github.com/DualGo/gl/v4.1-core/gl"
 	"github.com/DualGo/mathgl/mgl32"
 )
-const(
+
+const (
 	rectangleVertexShaderSource = `
 	#version 330 core
 	uniform mat4 projection; 
@@ -70,48 +70,32 @@ const(
 			color = texture(tex, fragTexCoord);
 	}
 	` + "\x00"
-
 )
 
-//- ## Interface Drawable2D
-//	- > Push()
-// 
-//	- > Pop()
-// 
-//	- > GetShader() `*shader.Shader`
-// 
 type Drawable2D interface {
 	Push()
 	Pop()
 	GetPosition() mgl32.Vec2
-	GetSize() 	  mgl32.Vec2
-	GetShader()  *shader.Shader
+	GetSize() mgl32.Vec2
+	GetShader() *shader.Shader
 }
 
-//- ## Struct Rectangle `implements Drawable2D`
-
-type Rectangle struct{
+type Rectangle struct {
 	position       mgl32.Vec2
 	size           mgl32.Vec2
 	origin         mgl32.Vec2
 	scale          float32
 	angle          float32
-	color		   mgl32.Vec4	
-	stroke		   float32	
+	color          mgl32.Vec4
+	stroke         float32
 	scaleMat       mgl32.Mat4
 	rotationMat    mgl32.Mat4
 	translationMat mgl32.Mat4
 	shader         shader.Shader
 	err            error
-
 }
 
-//	- ### Init(position, size, `mgl32.Vec2`, shader.Shader)
-//		- > init the rectangle
-// 
-//		- > return `void`
-// 
-func (rectangle *Rectangle) Init(position, size mgl32.Vec2){
+func (rectangle *Rectangle) Init(position, size mgl32.Vec2) {
 	rectangle.shader.Init(rectangleVertexShaderSource, rectangleFragmentShaderSource)
 	rectangle.shader.Use()
 	rectangle.position = position
@@ -124,12 +108,7 @@ func (rectangle *Rectangle) Init(position, size mgl32.Vec2){
 	gl.UseProgram(0)
 }
 
-//	- ### Push()
-//		- > push elements to be rendered
-// 
-//		- > retur `void`
-// 
-func (rectangle Rectangle) Push(){
+func (rectangle Rectangle) Push() {
 	model := mgl32.Translate3D(rectangle.position.X(), rectangle.position.Y(), 0)
 	model = model.Mul4(mgl32.Translate3D(rectangle.origin.X(), rectangle.origin.Y(), 0))
 	model = model.Mul4(mgl32.HomogRotate3D(rectangle.angle, mgl32.Vec3{0, 0, 1}))
@@ -140,187 +119,89 @@ func (rectangle Rectangle) Push(){
 	gl.UniformMatrix4fv(modelUniform, 1, false, &model[0])
 
 	colorUniform := gl.GetUniformLocation(rectangle.shader.GetProgram(), gl.Str("color\x00"))
-	gl.Uniform4f(colorUniform, rectangle.color.X(),rectangle.color.Y(), rectangle.color.Z(),rectangle.color.W())
+	gl.Uniform4f(colorUniform, rectangle.color.X(), rectangle.color.Y(), rectangle.color.Z(), rectangle.color.W())
 
 	stokeUniform := gl.GetUniformLocation(rectangle.shader.GetProgram(), gl.Str("stroke\x00"))
 	gl.Uniform1f(stokeUniform, rectangle.stroke)
 }
 
-//	- ### Pop()
-//		- > pop elements
-// 
-//		- > return `void`
-// 
-func (rectangle Rectangle) Pop(){
+func (rectangle Rectangle) Pop() {
 
 }
-
-//	- ### IsTextured() 
-//		- > to know if a primitive is textured
-// 
-//		- > return `bool`
-// 
 
 func (rectangle Rectangle) IsTextured() bool {
 	return false
 }
 
-//	- ### Move(x, y `float32`)
-//		- > move the rectangle
-// 
-//		- > return `void`
-// 
 func (rectangle *Rectangle) Move(x, y float32) {
 	rectangle.SetPosition(mgl32.Vec2{rectangle.position.X() + x, rectangle.position.Y() + y})
 }
 
-//	- ### SetScale(scale `float32`)
-//		- > set the scale of the scale 
-// 
-//		- > return `void`
-// 
 func (rectangle *Rectangle) SetScale(scale float32) {
 	rectangle.scale = scale
 }
 
-//	- ### GetScale()
-//		- > return the scale of the rectangle
-// 
-//		- > return `float32`
-// 
 func (rectangle Rectangle) GetScale() float32 {
 	return rectangle.scale
 }
 
-//	- ### SetAngle(angle `float32`)
-//		- > set rotation angle of the rectangle
-// 
-//		- > return `void`
-// 
 func (rectangle *Rectangle) SetAngle(angle float32) {
 	rectangle.angle = angle
 }
 
-//	- ### GetAngle()
-//		- > return rotation angle of the rectangle
-// 
-//		- > return `float32`
-// 
 func (rectangle Rectangle) GetAngle() float32 {
 	return rectangle.angle
 }
 
-//	- ### SetPosition(position `mgl32.Vec2`)
-//		- > set the position of the rectangle
-// 
-//		- > return `void`
-// 
 func (rectangle *Rectangle) SetPosition(position mgl32.Vec2) {
 	rectangle.position = position
 }
 
-//	- ### GetPosition()
-//		- > return the position of the rectangle
-// 
-//		- > return `mgl32.Vec2`
-// 
 func (rectangle Rectangle) GetPosition() mgl32.Vec2 {
 	return rectangle.position
 }
 
-//	- ### SetSize(size  `mgl32.Vec2`)
-//		- > set the size of the rectangle
-// 
-//		- > return `void`
-// 
 func (rectangle *Rectangle) SetSize(size mgl32.Vec2) {
 	rectangle.size = size
 }
 
-//	- ### GetSize()
-//		- > return the size of the rectangle
-// 
-//		- > return `mgl32.Vec2`
-// 
 func (rectangle Rectangle) GetSize() mgl32.Vec2 {
 	return rectangle.size
 }
 
-//	- ### SetOrigin(origin `mgl32.Vec2`)
-//		- > set oririgin of the rectangle
-// 
-//		- > return `void`
-// 
 func (rectangle *Rectangle) SetOrigin(origin mgl32.Vec2) {
 	rectangle.origin = origin
 }
 
-//	- ### GetOrigin()
-//		- > return the origin of the srite
-// 
-//		- > return `mgl32.Vec2`
-// 
 func (rectangle Rectangle) GetOrigin() mgl32.Vec2 {
 	return rectangle.origin
 }
 
-//	- ### SetColor( `mgl32.Vec4` )
-//		- > set the color of the rectangle
-// 
-//		- > return `void`
-// 
-func (rectangle *Rectangle) SetColor(color mgl32.Vec4){
+func (rectangle *Rectangle) SetColor(color mgl32.Vec4) {
 	rectangle.color = color
 }
 
-//	- ### GetColor()
-//		- > return the color of the rectangle
-// 
-//		- > return `mgl32.Vec4`
-// 
-func (rectangle Rectangle) GetColor() mgl32.Vec4{
+func (rectangle Rectangle) GetColor() mgl32.Vec4 {
 	return rectangle.color
 }
 
-//	- ### SetStroke(stroke `float32`)
-//		- > set stroke of the rectangle
-// 
-//		- > return `void`
-// 
 func (rectangle *Rectangle) SetStroke(stroke float32) {
 	rectangle.stroke = stroke
 }
 
-//	- ### GetStroke()
-//		- > return the stroke of the rectangle
-// 
-//		- > return `float32`
-// 
 func (rectangle Rectangle) GetStroke() float32 {
 	return rectangle.stroke
 }
 
-//	- ### GetShader()
-//		- > return the shader of the rectangle
-// 
-//		- > return `*shader.Shader`
-// 
 func (rectangle Rectangle) GetShader() *shader.Shader {
 	return &rectangle.shader
 }
-
-//- ## Struct Sprite `implements Drawable2D`
 
 type Sprite struct {
 	rectangle Rectangle
 	texture   uint32
 }
 
-//	- ### Init(position, size `mgl32.Vec2`, texturePath `string`, shader `*shader.Shader`)
-//		- > init the sprite
-// 
-//		- > return `void`
-// 
 func (sprite *Sprite) Init(position, size mgl32.Vec2, texturePath string) {
 	sprite.rectangle.Init(position, size)
 	sprite.rectangle.shader.Init(spriteVertexShaderSource, spriteFragmentShaderSource)
@@ -332,142 +213,73 @@ func (sprite *Sprite) Init(position, size mgl32.Vec2, texturePath string) {
 
 }
 
-//	- ### Push()
-//		- > push sprite element to be rendered 
-// 
-//		- > return `void`
-// 
 func (sprite Sprite) Push() {
 	gl.ActiveTexture(gl.TEXTURE0)
 	gl.BindTexture(gl.TEXTURE_2D, sprite.texture)
 	sprite.rectangle.Push()
 }
-//	- ### Pop()
-//		- > Pop elements 
-// 
-//		- > return `void`
-// 
+
 func (sprite Sprite) Pop() {
 	gl.BindTexture(gl.TEXTURE_2D, 0)
 	sprite.rectangle.Pop()
 }
 
-//	- ### IsTextured() 
-//		- > to know if a primitive is textured
-// 
-//		- > return `bool`
-// 
-
 func (sprite Sprite) IsTextured() bool {
 	return false
 }
 
-//	- ### Move(x, y `float32`)
-//		- > move the sprite
-// 
-//		- > return `void`
-// 
 func (sprite *Sprite) Move(x, y float32) {
 	sprite.SetPosition(mgl32.Vec2{sprite.rectangle.position.X() + x, sprite.rectangle.position.Y() + y})
 }
 
-//	- ### SetScale(scale `float32`)
-//		- > set the scale of the scale 
-// 
-//		- > return `void`
-// 
 func (sprite *Sprite) SetScale(scale float32) {
 	sprite.rectangle.scale = scale
 }
 
-//	- ### GetScale()
-//		- > return the scale of the sprite
-// 
-//		- > return `float32`
-// 
 func (sprite Sprite) GetScale() float32 {
 	return sprite.rectangle.scale
 }
 
-//	- ### SetAngle(angle `float32`)
-//		- > set rotation angle of the sprite
-// 
-//		- > return `void`
-// 
 func (sprite *Sprite) SetAngle(angle float32) {
 	sprite.rectangle.angle = angle
 }
 
-//	- ### GetAngle()
-//		- > return rotation angle of the sprite
-// 
-//		- > return `float32`
-// 
 func (sprite Sprite) GetAngle() float32 {
 	return sprite.rectangle.angle
 }
 
-//	- ### SetPosition(position `mgl32.Vec2`)
-//		- > set the position of the sprite
-// 
-//		- > return `void`
-// 
 func (sprite *Sprite) SetPosition(position mgl32.Vec2) {
 	sprite.rectangle.position = position
 }
 
-//	- ### GetPosition()
-//		- > return the position of the sprite
-// 
-//		- > return `mgl32.Vec2`
-// 
 func (sprite Sprite) GetPosition() mgl32.Vec2 {
 	return sprite.rectangle.position
 }
 
-//	- ### SetSize(size  `mgl32.Vec2`)
-//		- > set the size of the sprite
-// 
-//		- > return `void`
-// 
 func (sprite *Sprite) SetSize(size mgl32.Vec2) {
 	sprite.rectangle.size = size
 }
 
-//	- ### GetSize()
-//		- > return the size of the sprite
-// 
-//		- > return `mgl32.Vec2`
-// 
 func (sprite Sprite) GetSize() mgl32.Vec2 {
 	return sprite.rectangle.size
 }
 
-//	- ### SetOrigin(origin `mgl32.Vec2`)
-//		- > set oririgin of the sprite
-// 
-//		- > return `void`
-// 
 func (sprite *Sprite) SetOrigin(origin mgl32.Vec2) {
 	sprite.rectangle.origin = origin
 }
 
-//	- ### GetOrigin()
-//		- > return the origin of the srite
-// 
-//		- > return `mgl32.Vec2`
-// 
 func (sprite Sprite) GetOrigin() mgl32.Vec2 {
 	return sprite.rectangle.origin
 }
 
-//	- ### GetShader()
-//		- > return the sahder of the sprite
-// 
-//		- > return `*shader.Shader`
-// 
 func (sprite Sprite) GetShader() *shader.Shader {
 	return &sprite.rectangle.shader
 }
 
+func (sprite *Sprite) SetTexture(texture uint32) {
+	sprite.texture = texture
+}
 
+func (sprite Sprite) GetTexture() uint32 {
+	return sprite.texture
+}
