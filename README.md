@@ -10,7 +10,7 @@ You can dowload the engine with this command :
 See the website here : [dualGo](https://www.episprog.fr "")
 
 ## Goals
-The main goal of the project is to provide a go 2D framework for making games and other 2D stuff based on OpenGl
+The main goal of the project is to provide a go 2D framework for making games and other 2D stuff based on OpenGL
 
 ## Dependencies 
 DualGo uses a number of projects to work:
