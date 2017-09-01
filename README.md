@@ -1,6 +1,8 @@
 # DualGo
 [![Go Report Card](https://goreportcard.com/badge/github.com/DualGo/dualGo)](https://goreportcard.com/report/github.com/DualGo/dualGo)
  
+[![Build Status](https://travis-ci.org/DualGo/dualGo.svg?branch=master)](https://travis-ci.org/DualGo/dualGo) 
+ 
 The DualGo game engine's sources 
 
 You can dowload the engine with this command :
