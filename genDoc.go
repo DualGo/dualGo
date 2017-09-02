@@ -1,5 +1,3 @@
-//not used in this project 
-
 package main
 
 import (
