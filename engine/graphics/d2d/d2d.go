@@ -193,6 +193,10 @@ func (rectangle Rectangle) GetStroke() float32 {
 	return rectangle.stroke
 }
 
+func (rectangle *Rectangle) SetShader(shader shader.Shader) {
+	rectangle.shader = shader
+}
+
 func (rectangle Rectangle) GetShader() *shader.Shader {
 	return &rectangle.shader
 }
@@ -270,6 +274,10 @@ func (sprite *Sprite) SetOrigin(origin mgl32.Vec2) {
 
 func (sprite Sprite) GetOrigin() mgl32.Vec2 {
 	return sprite.rectangle.origin
+}
+
+func (sprite *Sprite) SetShader(shader shader.Shader) {
+	sprite.rectangle.shader = shader
 }
 
 func (sprite Sprite) GetShader() *shader.Shader {

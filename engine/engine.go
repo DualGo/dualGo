@@ -8,6 +8,7 @@ import (
 	"github.com/DualGo/dualGo/engine/input"
 	"github.com/DualGo/dualGo/engine/renderer"
 	"github.com/DualGo/dualGo/engine/utils"
+	"github.com/DualGo/mathgl/mgl64"
 
 	"github.com/DualGo/dualGo/engine/extends"
 
@@ -63,15 +64,26 @@ func (engine *Engine) Init(width, height int, renderer *renderer.Renderer2D, tit
 	onKeyPressed := func(w *glfw.Window, key glfw.Key, scancode int, action glfw.Action, mods glfw.ModifierKey) {
 		input.SetKey(key, action)
 	}
+	onMouseButtonPressed := func(w *glfw.Window, button glfw.MouseButton, action glfw.Action, mod glfw.ModifierKey) {
+		input.SetButton(button, action)
+	}
+	onMouseMoved := func(w *glfw.Window, xpos float64, ypos float64) {
+		input.SetMousePosition(mgl64.Vec2{xpos, ypos})
+	}
 	joystickCallback := func(joy, event int) {
+		fmt.Println(event)
 		if event == 0x00040001 {
 			input.ConnectJoystick(joy)
+			fmt.Println("connect")
 		} else if event == 0x00040002 {
 			input.DisconnectJoystick(joy)
+			fmt.Println("disconnect")
 		}
 	}
 	engine.window.SetSizeCallback(onResize)
 	engine.window.SetKeyCallback(onKeyPressed)
+	engine.window.SetMouseButtonCallback(onMouseButtonPressed)
+	engine.window.SetCursorPosCallback(onMouseMoved)
 	glfw.SetJoystickCallback(joystickCallback)
 
 	// Initialize Glow
@@ -102,6 +114,7 @@ func (engine *Engine) AddModule(module extends.Module) {
 
 func (engine *Engine) loop(callback UpdateFunc) {
 	for !engine.window.ShouldClose() {
+		glfw.PollEvents()
 		gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 		for _, element := range engine.modules {
 			if element.GetUpdatePosition() == "first" {
@@ -116,7 +129,8 @@ func (engine *Engine) loop(callback UpdateFunc) {
 			}
 		}
 		input.RemoveKeys()
+		input.RemoveButtons()
 		engine.window.SwapBuffers()
-		glfw.PollEvents()
+
 	}
 }

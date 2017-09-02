@@ -1,19 +1,35 @@
 package input
 
-import "github.com/DualGo/glfw/v3.2/glfw"
+import (
+	"github.com/DualGo/glfw/v3.2/glfw"
+	"github.com/DualGo/mathgl/mgl64"
+)
 
 const (
-	KEYDOWN  = 1
 	KEYUP    = 0
+	KEYDOWN  = 1
 	KEYPRESS = 2
 )
 
+const (
+	BUTTONUP    = 0
+	BUTTONDOWN  = 1
+	BUTTONPRESS = 2
+)
+
 var keys []Key
+var mouseButtons []Button
+var mousePosition mgl64.Vec2
 var joysticks []Joystick
 
 type Key struct {
 	keycode glfw.Key
 	action  glfw.Action
+}
+
+type Button struct {
+	buttoncode glfw.MouseButton
+	action     glfw.Action
 }
 
 func GetKey(keycode glfw.Key) int {
@@ -31,6 +47,31 @@ func SetKey(keycode glfw.Key, action glfw.Action) {
 
 func RemoveKeys() {
 	keys = nil
+}
+
+func GetButton(buttoncode glfw.MouseButton) int {
+	for _, element := range mouseButtons {
+		if buttoncode == element.buttoncode {
+			return int(element.action)
+		}
+	}
+	return 0
+}
+
+func SetButton(buttoncode glfw.MouseButton, action glfw.Action) {
+	mouseButtons = append(mouseButtons, Button{buttoncode, action})
+}
+
+func RemoveButtons() {
+	mouseButtons = nil
+}
+
+func SetMousePosition(pos mgl64.Vec2) {
+	mousePosition = pos
+}
+
+func GetMousePosition() mgl64.Vec2 {
+	return mousePosition
 }
 
 type Joystick struct {

@@ -26,7 +26,6 @@
 - [ ] integrer en interne glfont ? ( recupérer les shaders et ajouter la matrices de la caméra ) interface ? 
 - [ ] bien organiser les constantes 
 - [x] joystick input 
-- [ ] mouse input 
 - [ ] garder une certaine logique nottament pour le move du         sprite
 - [ ] améliorer l'audio
 - [x] add performances to the joystick disconnection 
@@ -36,3 +35,5 @@
 - [ ] pb keyboard with joystick
 - [ ] joystick qui envoie des valeur même sans bouger 
 - [ ] faire un heritage pour pouvoir ajouter le renderer 3D 
+- [ ] remplacer par le systeme de glfw 
+- [x] mouse input 
