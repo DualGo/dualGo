@@ -37,3 +37,6 @@
 - [ ] faire un heritage pour pouvoir ajouter le renderer 3D 
 - [ ] remplacer par le systeme de glfw 
 - [x] mouse input 
+- [ ] problème dans le module debug 
+- [ ] problème poure le double input 
+- [ ] l'etat BUTTONPRESS ne fonctionne pas 
