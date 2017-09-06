@@ -2,6 +2,8 @@ package modules
 
 // # Package modules
 import (
+	"math/rand"
+
 	"github.com/DualGo/dualGo/engine/extends"
 	"github.com/DualGo/dualGo/engine/graphics/d2d"
 	"github.com/DualGo/dualGo/engine/renderer"
@@ -77,4 +79,8 @@ func String(n int32) string {
 			return string(buf[pos:])
 		}
 	}
+}
+
+func RandInt(min int, max int) int {
+	return min + rand.Intn(max-min)
 }
