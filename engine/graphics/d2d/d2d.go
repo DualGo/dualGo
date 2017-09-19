@@ -84,36 +84,33 @@ const (
 	out vec4 colorIn;
 	out vec4 position;
 	out float strokeIn;
-	out float radiusIn;
-	out vec2  centerIn;
 	void main(){
 		colorIn = color;
 		gl_Position = projection*model*vec4(vertexPosition, 1);
 		position = vec4(vertexPosition, 1);
 		strokeIn = stroke;
-		radiusIn = radius;
-		centerIn = vec2(vertexPosition.x-radius/2, vertexPosition.y-radius/2);
 	}
 	` + "\x00"
 	circleFragmentShaderSource = `
 	#version 330 core
 	in vec4 colorIn;
 	in vec4 position;
-	in vec2 centerIn;
-	in float radiusIn;
 	in float strokeIn;
 	out vec4 color;
-	
-	float circle(in vec2 _st, in float _radius){
-		vec2 dist = _st-vec2(0.5);
-		return 1.-smoothstep(_radius-(_radius*0.01),
-							 _radius+(_radius*0.01),
-							 dot(dist,dist)*4.0);
-	}
+
 	
 	void main(){
-		vec2 st = centerIn.xy/vec2(0.2,0.2);
-		color = vec4(vec3(circle(st, radiusIn)), 1.0);
+		vec2 uv = position.xy;
+		uv -= vec2(0.5,0.5);
+		float dist = sqrt(dot(uv,uv));
+		if ((dist >(0.3+0.005)) || (dist < (0.3-0.005)))
+			discard;
+		else
+			color = colorIn;
+		//if(sqrt(uv.x) > 1 || sqrt(uv.y) > 1)
+			//discard;
+		//else
+			//color = colorIn;
 	}
 	` + "\x00"
 )
@@ -246,22 +243,17 @@ func (rectangle Rectangle) GetShader() *shader.Shader {
 type Circle struct {
 	rectangle Rectangle
 	radius    float32
-	center    mgl32.Vec2
 }
 
 func (circle *Circle) Init(position mgl32.Vec2, radius float32) {
-	circle.rectangle.Init(position, mgl32.Vec2{radius, radius})
+	circle.rectangle.Init(position, mgl32.Vec2{radius * 2, radius * 2})
 	circle.rectangle.shader.Init(circleVertexShaderSource, circleFragmentShaderSource)
-	circle.center = position.Add(circle.rectangle.size.Mul(1 / 2))
+	//circle.rectangle.origin = mgl32.Vec2{circle.rectangle.position.X() + circle.rectangle.size.X()/2, circle.rectangle.position.Y() + circle.rectangle.size.Y()/2}
 	circle.radius = radius
 }
 
 func (circle Circle) Push() {
 	circle.rectangle.Push()
-	radiusUniform := gl.GetUniformLocation(circle.rectangle.shader.GetProgram(), gl.Str("radius\x00"))
-	gl.Uniform1f(radiusUniform, circle.radius)
-	centerUniform := gl.GetUniformLocation(circle.rectangle.shader.GetProgram(), gl.Str("center\x00"))
-	gl.Uniform2f(centerUniform, circle.center.X(), circle.center.Y())
 }
 
 func (circle Circle) Pop() {
@@ -291,7 +283,7 @@ func (circle Circle) GetAngle() float32 {
 
 func (circle *Circle) SetPosition(position mgl32.Vec2) {
 	circle.rectangle.position = position
-	circle.center = position.Add(circle.rectangle.size.Mul(1 / 2))
+
 }
 
 func (circle Circle) GetPosition() mgl32.Vec2 {
@@ -300,7 +292,7 @@ func (circle Circle) GetPosition() mgl32.Vec2 {
 
 func (circle *Circle) SetSize(size mgl32.Vec2) {
 	circle.rectangle.size = size
-	circle.center = circle.rectangle.position.Add(size.Mul(1 / 2))
+
 }
 
 func (circle Circle) GetSize() mgl32.Vec2 {
@@ -315,16 +307,12 @@ func (circle Circle) GetOrigin() mgl32.Vec2 {
 	return circle.rectangle.origin
 }
 
-func (circle *Circle) SetCircle(radius float32) {
+func (circle *Circle) SetRadius(radius float32) {
 	circle.radius = radius
 }
 
-func (circle Circle) GetCircle() float32 {
+func (circle Circle) GetRadius() float32 {
 	return circle.radius
-}
-
-func (circle Circle) GetCenter() mgl32.Vec2 {
-	return circle.center
 }
 
 func (circle *Circle) SetShader(shader shader.Shader) {
@@ -333,6 +321,14 @@ func (circle *Circle) SetShader(shader shader.Shader) {
 
 func (circle Circle) GetShader() *shader.Shader {
 	return &circle.rectangle.shader
+}
+
+func (circle *Circle) SetColor(color mgl32.Vec4) {
+	circle.rectangle.color = color
+}
+
+func (circle Circle) GetColor() mgl32.Vec4 {
+	return circle.rectangle.color
 }
 
 type Sprite struct {
