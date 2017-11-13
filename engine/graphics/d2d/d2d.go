@@ -98,12 +98,14 @@ const (
 	in float strokeIn;
 	out vec4 color;
 
+
 	
 	void main(){
+		float stroke = strokeIn * 0.3;
 		vec2 uv = position.xy;
 		uv -= vec2(0.5,0.5);
 		float dist = sqrt(dot(uv,uv));
-		if ((dist >(0.3+0.005)) || (dist < (0.3-0.005)))
+		if ((dist >(0.3+0)) || (dist < (0.3-stroke)))
 			discard;
 		else
 			color = colorIn;
@@ -243,6 +245,7 @@ func (rectangle Rectangle) GetShader() *shader.Shader {
 type Circle struct {
 	rectangle Rectangle
 	radius    float32
+	stroke    float32
 }
 
 func (circle *Circle) Init(position mgl32.Vec2, radius float32) {
@@ -250,10 +253,13 @@ func (circle *Circle) Init(position mgl32.Vec2, radius float32) {
 	circle.rectangle.shader.Init(circleVertexShaderSource, circleFragmentShaderSource)
 	//circle.rectangle.origin = mgl32.Vec2{circle.rectangle.position.X() + circle.rectangle.size.X()/2, circle.rectangle.position.Y() + circle.rectangle.size.Y()/2}
 	circle.radius = radius
+	circle.stroke = 1
 }
 
 func (circle Circle) Push() {
 	circle.rectangle.Push()
+	strokeUniform := gl.GetUniformLocation(circle.rectangle.shader.GetProgram(), gl.Str("stroke\x00"))
+	gl.Uniform1f(strokeUniform, circle.stroke)
 }
 
 func (circle Circle) Pop() {
@@ -329,6 +335,14 @@ func (circle *Circle) SetColor(color mgl32.Vec4) {
 
 func (circle Circle) GetColor() mgl32.Vec4 {
 	return circle.rectangle.color
+}
+
+func (circle *Circle) SetStroke(stroke float32) {
+	circle.stroke = stroke
+}
+
+func (circle *Circle) GetStroke() float32 {
+	return circle.stroke
 }
 
 type Sprite struct {
