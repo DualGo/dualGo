@@ -18,13 +18,16 @@ const (
 	uniform mat4 model;
 	uniform	vec4 color;
 	uniform float stroke;
+	uniform vec4 strokeColor;
 	in vec3 vertexPosition;
 	in vec2 vertTexCoord;
 	out vec4 colorIn;
 	out vec4 position;
 	out float strokeIn;
+	out vec4 colorStroke;
 	void main(){
 		colorIn = color;
+		colorStroke = strokeColor;
 		gl_Position = projection*model*vec4(vertexPosition, 1);
 		position = vec4(vertexPosition, 1);
 		strokeIn = stroke;
@@ -35,13 +38,17 @@ const (
 	in vec4 colorIn;
 	in vec4 position;
 	in float strokeIn;
+	in vec4 colorStroke;
 	out vec4 color;
 	void main(){
 		if(position.y > (1-strokeIn) || position.y < (0+strokeIn)){
-			color = colorIn;
+			color = colorStroke;
 				
 		}
 		else if(position.x > (1-strokeIn)|| position.x < (0+strokeIn)){
+			color = colorStroke;
+		}
+		else{
 			color = colorIn;
 		}
   		
@@ -76,16 +83,19 @@ const (
 	uniform mat4 projection; 
 	uniform mat4 model;
 	uniform	vec4 color;
+	uniform vec4 strokeColor;
 	uniform float stroke;
 	uniform vec2 center;
 	uniform	float radius;
 	in vec3 vertexPosition;
 	in vec2 vertTexCoord;
 	out vec4 colorIn;
+	out vec4 colorStroke;
 	out vec4 position;
 	out float strokeIn;
 	void main(){
 		colorIn = color;
+		colorStroke = strokeColor;
 		gl_Position = projection*model*vec4(vertexPosition, 1);
 		position = vec4(vertexPosition, 1);
 		strokeIn = stroke;
@@ -94,6 +104,7 @@ const (
 	circleFragmentShaderSource = `
 	#version 330 core
 	in vec4 colorIn;
+	in vec4 colorStroke;
 	in vec4 position;
 	in float strokeIn;
 	out vec4 color;
@@ -105,14 +116,14 @@ const (
 		vec2 uv = position.xy;
 		uv -= vec2(0.5,0.5);
 		float dist = sqrt(dot(uv,uv));
-		if ((dist >(0.3+0)) || (dist < (0.3-stroke)))
+		if (dist >(0.3+0))
 			discard;
-		else
+		else if (dist < (0.3-stroke))
 			color = colorIn;
-		//if(sqrt(uv.x) > 1 || sqrt(uv.y) > 1)
-			//discard;
-		//else
-			//color = colorIn;
+		else
+			color = colorStroke;
+		
+	
 	}
 	` + "\x00"
 )
@@ -133,6 +144,7 @@ type Rectangle struct {
 	angle          float32
 	color          mgl32.Vec4
 	stroke         float32
+	strokeColor    mgl32.Vec4
 	scaleMat       mgl32.Mat4
 	rotationMat    mgl32.Mat4
 	translationMat mgl32.Mat4
@@ -150,6 +162,7 @@ func (rectangle *Rectangle) Init(position, size mgl32.Vec2) {
 	rectangle.angle = 0
 	rectangle.color = constants.Param.DefaultColor
 	rectangle.stroke = 0.01
+	rectangle.strokeColor = mgl32.Vec4{1, 1, 1, 1}
 	gl.UseProgram(0)
 }
 
@@ -166,8 +179,12 @@ func (rectangle Rectangle) Push() {
 	colorUniform := gl.GetUniformLocation(rectangle.shader.GetProgram(), gl.Str("color\x00"))
 	gl.Uniform4f(colorUniform, rectangle.color.X(), rectangle.color.Y(), rectangle.color.Z(), rectangle.color.W())
 
-	stokeUniform := gl.GetUniformLocation(rectangle.shader.GetProgram(), gl.Str("stroke\x00"))
-	gl.Uniform1f(stokeUniform, rectangle.stroke)
+	strokeUniform := gl.GetUniformLocation(rectangle.shader.GetProgram(), gl.Str("stroke\x00"))
+	gl.Uniform1f(strokeUniform, rectangle.stroke)
+
+	strokeColorUniform := gl.GetUniformLocation(rectangle.shader.GetProgram(), gl.Str("strokeColor\x00"))
+	gl.Uniform4f(strokeColorUniform, rectangle.strokeColor.X(), rectangle.strokeColor.Y(), rectangle.strokeColor.Z(), rectangle.strokeColor.W())
+
 }
 
 func (rectangle Rectangle) Pop() {
@@ -232,6 +249,14 @@ func (rectangle *Rectangle) SetStroke(stroke float32) {
 
 func (rectangle Rectangle) GetStroke() float32 {
 	return rectangle.stroke
+}
+
+func (rectangle Rectangle) GetStrokeColor() mgl32.Vec4 {
+	return rectangle.strokeColor
+}
+
+func (rectangle *Rectangle) SetStrokeColor(strokeColor mgl32.Vec4) {
+	rectangle.strokeColor = strokeColor
 }
 
 func (rectangle *Rectangle) SetShader(shader shader.Shader) {
@@ -343,6 +368,14 @@ func (circle *Circle) SetStroke(stroke float32) {
 
 func (circle *Circle) GetStroke() float32 {
 	return circle.stroke
+}
+
+func (circle Circle) GetStrokeColor() mgl32.Vec4 {
+	return circle.rectangle.strokeColor
+}
+
+func (circle *Circle) SetStrokeColor(strokeColor mgl32.Vec4) {
+	circle.rectangle.strokeColor = strokeColor
 }
 
 type Sprite struct {

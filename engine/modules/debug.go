@@ -1,6 +1,9 @@
 package modules
 
-// # Package modules
+//create by thewrath
+//official debug module
+//version 0.1
+
 import (
 	"math/rand"
 
@@ -27,7 +30,8 @@ func (debug *Debug) Init(objects []d2d.Drawable2D) {
 	debug.color = mgl32.Vec4{0.4, 1, 0.4, 1}
 	debug.lastTime = 0
 	debug.shape.Init(mgl32.Vec2{0, 0}, mgl32.Vec2{50, 50})
-	debug.shape.SetColor(debug.color)
+	debug.shape.SetStrokeColor(debug.color)
+	debug.shape.SetColor(mgl32.Vec4{0, 0, 0, 0})
 	debug.shape.SetStroke(0.005)
 
 }
