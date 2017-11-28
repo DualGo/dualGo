@@ -32,7 +32,7 @@ func CreateWindow(title string, width, height int, fullscreen bool, msaa int){
 
 	Gl = gl.NewContext()
 	Gl.ClearColor(1,0,0,1)
-
+	initEngine()
 	Update(0)
 
 }
@@ -41,6 +41,7 @@ func Update(delta float32){
 	for !window.ShouldClose() {
 		glfw.PollEvents()
 		Gl.Clear(Gl.COLOR_BUFFER_BIT)
+		loopEngine()
 		window.SwapBuffers()
 	}
 }
