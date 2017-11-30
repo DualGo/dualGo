@@ -10,7 +10,7 @@ import(
 
 var(
 	window *glfw.Window
-	Gl *gl.Context
+	Gl *glHelper.Context
 )
 
 func CreateWindow(title string, width, height int, fullscreen bool, msaa int){
@@ -30,18 +30,17 @@ func CreateWindow(title string, width, height int, fullscreen bool, msaa int){
 
 	window.MakeContextCurrent()
 
-	Gl = gl.NewContext()
+	Gl = glHelper.NewContext()
 	Gl.ClearColor(1,0,0,1)
-	initEngine()
-	Update(0)
+	loop(0)
 
 }
 
-func Update(delta float32){
+func loop(delta float32){
 	for !window.ShouldClose() {
 		glfw.PollEvents()
 		Gl.Clear(Gl.COLOR_BUFFER_BIT)
-		loopEngine()
+		loopEngine(delta)
 		window.SwapBuffers()
 	}
 }
