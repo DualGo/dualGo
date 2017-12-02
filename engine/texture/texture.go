@@ -14,6 +14,10 @@ import (
 	"github.com/DualGo/gl/v4.1-core/gl"
 )
 
+type Texture struct {
+	Id uint32
+}
+
 type Font struct {
 	Name  string
 	Value *glfont.Font

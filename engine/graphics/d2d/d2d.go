@@ -1,8 +1,6 @@
 package d2d
 
 import (
-	"log"
-
 	"github.com/DualGo/dualGo/engine/shader"
 	"github.com/DualGo/dualGo/engine/texture"
 	"github.com/DualGo/dualGo/engine/utils"
@@ -380,23 +378,20 @@ func (circle *Circle) SetStrokeColor(strokeColor mgl32.Vec4) {
 
 type Sprite struct {
 	rectangle Rectangle
-	texture   uint32
+	texture   texture.Texture
 }
 
-func (sprite *Sprite) Init(position, size mgl32.Vec2, texturePath string) {
+func (sprite *Sprite) Init(position, size mgl32.Vec2, texture texture.Texture) {
 	sprite.rectangle.Init(position, size)
 	sprite.rectangle.shader.Init(spriteVertexShaderSource, spriteFragmentShaderSource)
 	//load texture
-	sprite.texture, sprite.rectangle.err = texture.NewTexture(constants.Param.TexturePath, texturePath)
-	if sprite.rectangle.err != nil {
-		log.Fatalln(sprite.rectangle.err)
-	}
+	sprite.texture = texture
 
 }
 
 func (sprite Sprite) Push() {
 	gl.ActiveTexture(gl.TEXTURE0)
-	gl.BindTexture(gl.TEXTURE_2D, sprite.texture)
+	gl.BindTexture(gl.TEXTURE_2D, sprite.texture.Id)
 	sprite.rectangle.Push()
 }
 
@@ -457,10 +452,10 @@ func (sprite Sprite) GetShader() *shader.Shader {
 	return &sprite.rectangle.shader
 }
 
-func (sprite *Sprite) SetTexture(texture uint32) {
+func (sprite *Sprite) SetTexture(texture texture.Texture) {
 	sprite.texture = texture
 }
 
-func (sprite Sprite) GetTexture() uint32 {
+func (sprite Sprite) GetTexture() texture.Texture {
 	return sprite.texture
 }
